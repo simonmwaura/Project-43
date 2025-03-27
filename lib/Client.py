@@ -6,9 +6,10 @@ class Client:
     def create_client(cls, Client_name, Client_email, Client_phone_number, Client_identity_number):
         cursor = conn.cursor()
         sql = """INSERT INTO Client(Client_name,Client_email,Client_phone_number,Client_identity_number) 
+                 OUTPUT INSERTED.Client_id
                  VALUES(?,?,?,?)"""
         cursor.execute(sql, (Client_name, Client_email, Client_phone_number, Client_identity_number))   
-        cursor.execute("SELECT SCOPE_IDENTITY()")
+        
         client_id = cursor.fetchone()[0]
         conn.commit()
         return client_id
@@ -34,8 +35,9 @@ class Client:
             """
         cursor.execute(sql,(Client_name, Client_email, Client_phone_number, Client_identity_number, Client_id))
         conn.commit()
-        return Client_id
+        
         cursor.close()
+        return Client_id
 
 
     # delete user by id

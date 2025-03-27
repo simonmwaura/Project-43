@@ -164,12 +164,12 @@ class Database:
 
         conn.commit()
 
-db_obj=Database()
-db_obj.delete_tables()
-print("<------------THE TABLES HAVE BEEN DROPPED------------->")
-print("<------------CREATING THE TABLES---------->")
-db_obj.create_tables()
-print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
+# db_obj=Database()
+# db_obj.delete_tables()
+# print("<------------THE TABLES HAVE BEEN DROPPED------------->")
+# print("<------------CREATING THE TABLES---------->")
+# db_obj.create_tables()
+# print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
 
 # cursor.close()
 # conn.close()

@@ -58,7 +58,7 @@ def Client_operations():
             Client_phone_number=input("Input the new client phone number: ")
             Client_identity_number=input("Input the new client identity number: ")
 
-            Client_id=Client.update_single_client(Client_name, Client_email, Client_phone_number, Client_identity_number)
+            Client_id=Client.update_single_client(Client_id,Client_name, Client_email, Client_phone_number, Client_identity_number)
             print(f"\n Client with id {Client_id} updated successfully")
 
         elif choice=="3":
