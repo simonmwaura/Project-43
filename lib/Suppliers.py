@@ -22,7 +22,7 @@ class Suppliers:
         sql="""
                 SELECT * FROM Suppliers WHERE Supplier_id =?
             """
-        cursor.execute(sql, (Supplier_id,))
+        cursor.execute(sql, (Supplier_id, ))
         return cursor.fetchone()
         cursor.close()
 
@@ -45,7 +45,7 @@ class Suppliers:
         sql="""
                  DELETE FROM Suppliers where Supplier_id=?
             """
-        cursor.execute(sql ,(Supplier_id))
+        cursor.execute(sql ,( Supplier_id, ))
         conn.commit()
         return Supplier_id
         cursor.close()
