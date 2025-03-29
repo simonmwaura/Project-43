@@ -1,7 +1,7 @@
 from lib.config import conn 
 class Personnel:
     # create personnel
-    def create_personnel(cls,Personnel_name,Personnel_identity_number,Personnel_code,Personnel_wages,Personnel_type,Personnel_role):
+    def create_personnel(cls, Personnel_name,Personnel_identity_number,Personnel_code,Personnel_wages,Personnel_type,Personnel_role):
         cursor = conn.cursor()
         sql="""
                INSERT INTO Personnel(Personnel_name,Personnel_identity_number,Personnel_code,Personnel_wages,Personnel_type,Personnel_role)
@@ -18,11 +18,12 @@ class Personnel:
     def fetch_single_personnel(cls,Personnel_id):
         cursor = conn.cursor()
         sql="""
-             SELECT * FROM Personnel WHERE Personnel_id=?
+             SELECT * FROM Personnel WHERE Personnel_id = ?
             """
-        cursor.execute(sql, (Personnel_id, ))
+        cursor.execute(sql ,(Personnel_id, ))
         return cursor.fetchone()
         cursor.close
+
     #  fetch all personnel
     def fetch_all_personnel(cls):
         cursor=conn.cursor()
