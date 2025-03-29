@@ -96,6 +96,6 @@ class Projects:
        sql="""
               SELECT COUNT(*) FROM Projects WHERE Client_id=?
            """
-       cursor.execute(sql,(Client_id,))
+       cursor.execute(sql,(Client_id))
        return cursor.fetchone()
        cursor.close()

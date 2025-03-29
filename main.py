@@ -1,5 +1,12 @@
+from lib.Certification import Certification
 from lib.Client import Client
 from lib.config import conn,cursor
+from lib.Equipment import Equipment
+from lib.Financials import Financials
+from lib.Materials import Materials
+from lib.Personnel import Personnel
+from lib.Projects import Projects
+from lib.Suppliers import Suppliers
 import sys
 
 def main_menu():
@@ -49,7 +56,7 @@ def main_menu():
     else:
         print("<-----Invalid input------>")    
     
-    
+
 def Client_operations():
     while True:
         print("|------------------------------------------------------|")
@@ -91,7 +98,7 @@ def Client_operations():
 
         elif choice =="4":
             all_clients=client.fetch_all_clients()
-            printf=("\n All Users \n")
+            print("\n All Users \n")
             print(all_clients)
         
         elif choice == "5":
@@ -107,19 +114,67 @@ def Client_operations():
 
 def Supplier_operations():
     while True:
-        print("|------------------------------------------------------|")
-        print("|                      SUPPLIERS MENU                  |")
-        print("|------------------------------------------------------|")
-        print("|    1.Add Supplier                                    |")
-        print("|    2.Fetch single Supplier by id                     |")
-        print("|    3.Update Supplier                                 |")
-        print("|    5.Delete Supplier                                 |")
-        print("|    4.Fetch all Suppliers                             |")
-        print("|    6.Count suppliers                                 |")
-        print("|    7.Return to main menu                             |")
-        print("|------------------------------------------------------|")
+            print("|------------------------------------------------------|")
+            print("|                      SUPPLIERS MENU                  |")
+            print("|------------------------------------------------------|")
+            print("|    1.Add Supplier                                    |")
+            print("|    2.Fetch single Supplier by id                     |")
+            print("|    3.Update Supplier                                 |")
+            print("|    4.Delete Supplier                                 |")
+            print("|    5.Fetch all Suppliers                             |")
+            print("|    6.Count suppliers                                 |")
+            print("|    7.Return to main menu                             |")
+            print("|------------------------------------------------------|")
 
-        choice = input("\n Enter your choice: ")
+            choice = input("\n Enter your choice: ")
+            supplier= Suppliers()
+            if choice=="1":
+                Supplier_name = input("Enter your name: ")
+                Supplier_email = input("Enter your email: ")
+                Supplier_phone_number = input("Enter your phone number: ")
+                Supplier_identity_number = input("Enter your identity number: ")
+                Supplier_status = input("Enter the status of the suppliers AVAILABLE OPTIONS ('Active','Inactive','Pending','Suspended'):")
+                Remaining_amount = input("Enter the amount of money owed to the supplier: ")
+                Supplier_id = supplier.create_suppliers(Supplier_name, Supplier_email, Supplier_phone_number, Supplier_identity_number,Supplier_status,Remaining_amount) 
+                print(f"\nSupplier with id {Supplier_id} was added successfully")
+
+            elif choice=="2":
+                Supplier_id =input("Enter Supplier id to fetch: \n")
+                single_Supplier = supplier.fetch_single_supplier(Supplier_id)
+                print(single_Supplier)    
+
+            elif choice=="3":
+                Supplier_id=input("Enter the Supplier id that you want to update: ")
+                Supplier_name = input("Enter the new Supplier name: ")
+                Supplier_email= input("Enter the new Supplier email: ")
+                Supplier_phone_number=input("Enter the new Supplier phone number: ")
+                Supplier_identity_number=input("Enter the new Supplier identity number: ")
+                Supplier_status = input("Enter the new status of the suppliers AVAILABLE OPTIONS ('Active','Inactive','Pending','Suspended'):")
+                Remaining_amount = input("Enter the new amount of money owed to the supplier: ")
+
+                Supplier_id=supplier.update_supplier_by_id(Supplier_id,Supplier_name, Supplier_email, Supplier_phone_number, Supplier_identity_number,Supplier_status,Remaining_amount)
+                print(f"\n Supplier with id {Supplier_id} updated successfully")
+
+            elif choice == "4":
+                Supplier_id=input("Enter Supplier id to delete: ")
+                delete_Supplier_id = supplier.delete_single_supplier(Supplier_id)
+
+                print(f"Supplier with id {delete_Supplier_id} deleted successfully.")    
+
+            elif choice =="5":
+                all_Suppliers=supplier.fetch_all_supplier()
+                print("\n All Suppliers \n")
+                print(all_Suppliers)
+            
+            elif choice =="6":
+                count_Suppliers=supplier.count_suppliers()
+                print(f"Total number of suppliers : {count_Suppliers}")
+                
+            elif choice == "7":
+                return main_menu() 
+                
+            else:
+                print("Invalid choice. Please enter a number between 1 and 7.")
 
 def Projects_operations():
     while True:
@@ -211,4 +266,5 @@ def Certificate_operations():
 
 def Financials_operations():
     print("<-------------------Comming soon------------------->")
+
 main_menu()     
