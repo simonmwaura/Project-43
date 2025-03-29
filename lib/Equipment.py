@@ -79,7 +79,7 @@ class Equipment:
         return Equipment_id
 
     
-    # count certicates by Equipment_id
+    # count equipment
     @classmethod
     def count_Equipment(cls):
         cursor=conn.cursor()

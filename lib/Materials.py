@@ -78,7 +78,7 @@ class Materials:
         return Material_id
 
     
-    # count certicates by Material_id
+    # count materials by Material_id
     @classmethod
     def count_Materials(cls):
         cursor=conn.cursor()

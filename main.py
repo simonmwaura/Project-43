@@ -1,4 +1,3 @@
-# from lib.config import Database
 from lib.Client import Client
 from lib.config import conn,cursor
 import sys
@@ -19,13 +18,37 @@ def main_menu():
     print("|------------------------------------------------------|")
 
     choice=(input("\nEnter your choice: "))
+
     if choice =="1":
         return Client_operations()
+    
+    elif choice == "2":
+        return Certificate_operations()
+    
+    elif choice == "3":
+        return Equipment_operations()
+    
+    elif choice == "4":
+        return Financials_operations()
+    
+    elif choice == "5":
+        return Materials_operations()
+    
+    elif choice == "6":
+        return Personnel_operations()
+
+    elif choice == "7":
+        return Projects_operations() 
+
+    elif choice == "8":
+        return Supplier_operations() 
+    
     elif choice == "9":
         print("<-----Exiting the application----->")
         sys.exit()
     else:
         print("<-----Invalid input------>")    
+    
     
 def Client_operations():
     while True:
@@ -82,5 +105,110 @@ def Client_operations():
         else:
             print("Invalid choice. Please enter a number between 1 and 6.")
 
-main_menu()     
+def Supplier_operations():
+    while True:
+        print("|------------------------------------------------------|")
+        print("|                      SUPPLIERS MENU                  |")
+        print("|------------------------------------------------------|")
+        print("|    1.Add Supplier                                    |")
+        print("|    2.Fetch single Supplier by id                     |")
+        print("|    3.Update Supplier                                 |")
+        print("|    5.Delete Supplier                                 |")
+        print("|    4.Fetch all Suppliers                             |")
+        print("|    6.Count suppliers                                 |")
+        print("|    7.Return to main menu                             |")
+        print("|------------------------------------------------------|")
 
+        choice = input("\n Enter your choice: ")
+
+def Projects_operations():
+    while True:
+        print("|------------------------------------------------------|")
+        print("|                     PROJECTS MENU                    |")
+        print("|------------------------------------------------------|")
+        print("|    1.Add Project                                     |")
+        print("|    2.Fetch single Project                            |")
+        print("|    3.Fetch single Project by Client id               |")
+        print("|    4.Fetch all Projects                              |")
+        print("|    5.Update Project                                  |")
+        print("|    6.Delete Project                                  |")
+        print("|    7.Count Projects                                  |")
+        print("|    8.Count Projects by Client_id                     |")
+        print("|    9.Return to main menu                             |")
+        print("|------------------------------------------------------|")
+        
+        choice = input("\n Enter your choice: ")
+
+def Personnel_operations():
+    while True:
+        print("|------------------------------------------------------|")
+        print("|                     PERSONNEL MENU                   |")
+        print("|------------------------------------------------------|")
+        print("|    1.Add Personnel                                   |")
+        print("|    2.Fetch single Personnel                          |")
+        print("|    3.Fetch all Personnel                             |")
+        print("|    4.Update Personnel                                |")
+        print("|    5.Delete Personnel                                |")
+        print("|    6.Count Personnel                                 |")
+        print("|    7.Return to main menu                             |")
+        print("|------------------------------------------------------|")
+        
+        choice = input("\n Enter your choice: ")
+
+def Materials_operations():
+    while True:
+        print("|------------------------------------------------------|")
+        print("|                     MATERIALS MENU                   |")
+        print("|------------------------------------------------------|")
+        print("|    1.Add Materials                                   |")
+        print("|    2.Fetch single Material                           |")
+        print("|    3.Fetch single Material by Supplier id            |")
+        print("|    4.Fetch all Materials                             |")
+        print("|    5.Update Materials                                |")
+        print("|    6.Delete Materials                                |")
+        print("|    7.Count Material                                  |")
+        print("|    8.Count Materials by Supplier id                  |")
+        print("|    9.Return to main menu                             |")
+        print("|------------------------------------------------------|")
+        
+        choice = input("\n Enter your choice: ")
+
+def Equipment_operations():
+    while True:
+        print("|------------------------------------------------------|")
+        print("|                     EQUIPMENT MENU                   |")
+        print("|------------------------------------------------------|")
+        print("|    1.Add Equipment                                   |")
+        print("|    2.Fetch single Equipment                          |")
+        print("|    3.Fetch single Equipment by Supplier id           |")
+        print("|    4.Fetch all Equipment                             |")
+        print("|    5.Update Equipment                                |")
+        print("|    6.Delete Equipment                                |")
+        print("|    7.Count Equipment                                 |")
+        print("|    8.Count Equipment by Supplier id                  |")
+        print("|    9.Return to main menu                             |")
+        print("|------------------------------------------------------|")
+        
+        choice = input("\n Enter your choice: ")
+
+def Certificate_operations():
+    while True:
+        print("|------------------------------------------------------|")
+        print("|                     CERTIFICATE MENU                 |")
+        print("|------------------------------------------------------|")
+        print("|    1.Add Certificate                                 |")
+        print("|    2.Fetch single Certificate                        |")
+        print("|    3.Fetch single Certificate by Personnel id        |")
+        print("|    4.Fetch all Certificate                           |")
+        print("|    5.Update Certificate                              |")
+        print("|    6.Delete Certificate                              |")
+        print("|    7.Count Certificate                               |")
+        print("|    8.Count Certificate by Personnel id               |")
+        print("|    9.Return to main menu                             |")
+        print("|------------------------------------------------------|")
+        
+        choice = input("\n Enter your choice: ")
+
+def Financials_operations():
+    print("<-------------------Comming soon------------------->")
+main_menu()     
