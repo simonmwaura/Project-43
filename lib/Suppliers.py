@@ -23,7 +23,15 @@ class Suppliers:
                 SELECT * FROM Suppliers WHERE Supplier_id =?
             """
         cursor.execute(sql, (Supplier_id, ))
-        return cursor.fetchone()
+        result = cursor.fetchone()
+        return (
+                "Supplier Details:\n"
+                "ID: {0}\nName: {1}\nEmail: {2}\nPhone: {3}\n"
+                "ID Number: {4}\nStatus: {5}\nBalance Due: KES {6:,.2f}"
+            ).format(
+                result[0], result[1], result[2], result[3],
+                result[4], result[5], float(result[6])
+            )
         cursor.close()
 
     # update supplier by id
@@ -55,10 +63,26 @@ class Suppliers:
     def fetch_all_supplier(cls):
         cursor=conn.cursor()
         sql="""
-               SELECT * FROM Suppliers
+               SELECT * FROM Suppliers ORDER BY Supplier_id
             """ 
         cursor.execute(sql) 
-        return cursor.fetchall()
+        results = cursor.fetchall()
+        header = "{:<5} {:<30} {:<15} {:<10} {:>15}".format(
+                "ID", "Supplier Name", "Phone", "Status", "Balance (KES)"
+            )
+        separator = "-" * 80
+        rows = [header, separator]
+
+        for sup in results:
+                rows.append("{:<5} {:<30} {:<15} {:<10} {:>15,.2f}".format(
+                    sup[0],
+                    sup[1][:28],  
+                    sup[3],
+                    sup[5],
+                    float(sup[6])
+                ))
+            
+        return "\n".join(rows)
         cursor.close()
 
     # count all suppliers
@@ -68,7 +92,7 @@ class Suppliers:
         sql="""
                  SELECT COUNT(*) FROM Suppliers
             """
-        cursor.execute(sql)
+        count = cursor.execute(sql)
         return cursor.fetchone()
         cursor.close()
 
