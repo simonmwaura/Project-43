@@ -15,54 +15,85 @@ print("<-----------------Connection successful----------------->")
 class Database:
      def create_tables(self):
         sql1="""
-                CREATE TABLE Client(
-                 Client_id INT IDENTITY(1,1) PRIMARY KEY,
-                 Client_name VARCHAR(50) NOT NULL UNIQUE,
-                 Client_email VARCHAR(100) NOT NULL UNIQUE,
-                 Client_phone_number VARCHAR(25) NOT NULL,
-                 Client_identity_number INT NOT NULL UNIQUE
-                );               
+               CREATE TABLE Client(
+                    Client_id INT IDENTITY(1,1) PRIMARY KEY,
+                    Client_name VARCHAR(50) NOT NULL UNIQUE,
+                    Client_email VARCHAR(100) NOT NULL UNIQUE,
+                    Client_phone_number VARCHAR(10) NOT NULL UNIQUE,
+                    Client_identity_number VARCHAR(9) NOT NULL UNIQUE,
+
+                    CONSTRAINT check_email CHECK(Client_email LIKE '%@%.%'),
+                    CONSTRAINT check_phone_number CHECK(Client_phone_number LIKE '07%' AND LEN(Client_phone_number) = 10),
+                    CONSTRAINT check_identity_number CHECK (LEN(Client_identity_number) BETWEEN 8 AND 9)
+               );               
              """
         cursor.execute(sql1)
 
         sql2="""
                CREATE TABLE Suppliers(
-               Supplier_id INT IDENTITY(1,1) PRIMARY KEY,
-               Supplier_name VARCHAR(100) NOT NULL UNIQUE,
-               Supplier_email VARCHAR(100) NOT NULL,
-               Supplier_phone_number VARCHAR(25) NOT NULL,
-               Supplier_identity_number INT NOT NULL UNIQUE,
-               Supplier_status VARCHAR(20) CHECK (Supplier_status IN ('Active','Inactive','Pending','Suspended')),
-               Remaining_amount DECIMAL(15,2) NOT NULL 
+                    Supplier_id INT IDENTITY(1,1) PRIMARY KEY,
+                    Supplier_name VARCHAR(100) NOT NULL UNIQUE,
+                    Supplier_email VARCHAR(100) NOT NULL UNIQUE,
+                    Supplier_phone_number VARCHAR(10) NOT NULL UNIQUE,
+                    Supplier_identity_number VARCHAR(9) NOT NULL UNIQUE,
+                    Supplier_status VARCHAR(20) NOT NULL,
+                    Remaining_amount DECIMAL(15,2) NOT NULL,
+
+                    CONSTRAINT check_supplier_email CHECK(Supplier_email LIKE '%_@__%.__%'),
+                    CONSTRAINT check_supplier_phone_number CHECK(Supplier_phone_number LIKE '07%' AND LEN(Supplier_phone_number) = 10),
+                    CONSTRAINT check_supplier_identity_number CHECK(LEN(Supplier_identity_number) BETWEEN 8 AND 9),
+                    CONSTRAINT check_status CHECK(Supplier_status IN ('Active','Inactive','Pending','Suspended')),
+                    CONSTRAINT check_remaining_amount CHECK(Remaining_amount >= 0.00)
               ); 
             """
         cursor.execute(sql2)
         
         sql3="""
-             CREATE TABLE Personnel(
-              Personnel_id INT IDENTITY(1,1) PRIMARY KEY,
-              Personnel_name VARCHAR(50) NOT NULL UNIQUE,
-              Personnel_identity_number INT NOT NULL UNIQUE,
-              Personnel_code VARCHAR(50) NOT NULL UNIQUE,
-              Personnel_wages DECIMAL(15,2) NOT NULL,
-              Personnel_type VARCHAR(50) NOT NULL CHECK(Personnel_type IN ('Professional','Skilled','Unskilled')),
-              Personnel_role VARCHAR(50) NOT NULL,
+               CREATE TABLE Personnel(
+                    Personnel_id INT IDENTITY(1,1) PRIMARY KEY, 
+                    Personnel_name VARCHAR(50) NOT NULL UNIQUE,
+                    Personnel_identity_number VARCHAR(9) NOT NULL UNIQUE,
+                    Personnel_code VARCHAR(50) NOT NULL UNIQUE,
+                    Personnel_wages DECIMAL(15,2) NOT NULL,
+                    Personnel_type VARCHAR(50) NOT NULL,
+                    Personnel_role VARCHAR(50) NOT NULL,
+
+                    CONSTRAINT check_personnel_identity_number CHECK (LEN(Personnel_identity_number) BETWEEN 8 AND 9),
+                    CONSTRAINT check_personnel_type CHECK (Personnel_type IN ('Professional','Skilled','Unskilled')),                     
+                    CONSTRAINT check_personnel_wages CHECK (Personnel_wages >= 0.00),
+                    CONSTRAINT check_personnel_role CHECK(
+                    (Personnel_type = 'Professional' AND Personnel_role IN (
+                    'Project Manager','Architect','Structural Engineer','Quantity Surveyor','Mechanical Engineer','Electrical Engineer','Site Supervisor)) OR
+                    (Personnel_type = 'Skilled' AND Personnel_role IN ('Mason','Plumber','Electrician','Carpenter','Welder', 'Painter','Roofer'))   OR
+                    (Personnel_type = 'Unskilled' AND Personnel_role IN ('Laborer'))
+                    ),
+                    CONSTRAINT check_personnel_code CHECK (
+                    (Personnel_type = 'Professional' AND Personnel_code LIKE 'P[A-Z][A-Z][0-9][0-9][0-9]') OR
+                    (Personnel_type = 'Skilled' AND Personnel_code LIKE 'S[A-Z][A-Z][0-9][0-9][0-9]') OR
+                    (Personnel_type = 'Unskilled' AND Personnel_code LIKE 'U[A-Z][A-Z][0-9][0-9][0-9]')
+                    )
+
              );
-              """
+           """
         cursor.execute(sql3)
 
         sql4="""
                  CREATE TABLE Projects(
                  Project_id INT IDENTITY(1,1) PRIMARY KEY,
+                 Client_id INT NOT NULL,
+                 Personnel_id INT NOT NULL,
                  Project_name VARCHAR(100) NOT NULL UNIQUE,
                  Project_start_date DATE NOT NULL,
                  Project_end_date DATE NOT NULL,
-                 Project_budget DECIMAL(18,2) NOT NULL,
-                 Client_id INT,
-                 Personnel_id INT,
-                 Project_status VARCHAR(50) NOT NULL CHECK(Project_status IN ('Pending','In progress','Completed','On hold')), 
+                 Project_budget DECIMAL(15,2) NOT NULL,
+                 Project_status VARCHAR(10) NOT NULL,
+
+ 
                  CONSTRAINT client_project_foreign_key FOREIGN KEY (Client_id) REFERENCES Client(Client_id) ON DELETE CASCADE,
-                 CONSTRAINT personnel_project_foreign_key FOREIGN kEY (Personnel_id) REFERENCES Personnel(Personnel_id) ON DELETE CASCADE
+                 CONSTRAINT personnel_project_foreign_key FOREIGN KEY (Personnel_id) REFERENCES Personnel(Personnel_id) ON DELETE CASCADE,
+                 CONSTRAINT check_project_budget CHECK ( Project_budget >= 0.00),
+                 CONSTRAINT check_project_status CHECK ( Project_status IN ('Pending','In progress','Completed','On hold','Cancelled'),)
+                 CONSTRAINT Check_project_date CHECK (Project_end_date > Project_start_date)
                  );
             """
         cursor.execute(sql4)
@@ -74,7 +105,19 @@ class Database:
                 Certification_number VARCHAR(100) NOT NULL UNIQUE,
                 Certification_name VARCHAR(150) NOT NULL,
                 Certification_expiry_date DATE NOT NULL,
-                CONSTRAINT personnel_certification_foreign_key FOREIGN KEY (Personnel_id) REFERENCES Personnel(Personnel_id) ON DELETE CASCADE
+                Certification_status VARCHAR(20) NOT NULL DEFAULT 'Active',
+
+
+                CONSTRAINT personnel_certification_foreign_key FOREIGN KEY (Personnel_id) REFERENCES Personnel(Personnel_id) ON DELETE CASCADE,
+                CONSTRAINT check_certification_expiry_date CHECK (Certfification_expiry_date > GETDATE()),
+                CONSTRAINT check_certification_status CHECK (Certification_status IN ('Active','Expired','Revoked','Pending')),
+                CONSTRAINT check_skilled_personnel_only CHECK (
+            EXISTS (
+                SELECT 1 FROM Personnel p 
+                WHERE p.Personnel_id = Personnel_id 
+                AND p.Personnel_type = 'Skilled'
+            )
+        )
               );
              """
         cursor.execute(sql5)
@@ -231,6 +274,6 @@ db_obj.create_views()
 print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
 print("<------------THE TABLES HAVE BEEN CREATED------------->")
 
-# cursor.close()
+# conn.close()
 # conn.close()
     
