@@ -9,10 +9,11 @@ connection_string = (
 
 conn = pyodbc.connect(connection_string)
 cursor = conn.cursor() 
-print("Connection successful!")
+print("<-----------------Connection successful----------------->")
+
 
 class Database:
-    def create_tables(self):
+     def create_tables(self):
         sql1="""
                 CREATE TABLE Client(
                  Client_id INT IDENTITY(1,1) PRIMARY KEY,
@@ -58,8 +59,10 @@ class Database:
                  Project_end_date DATE NOT NULL,
                  Project_budget DECIMAL(18,2) NOT NULL,
                  Client_id INT,
+                 Personnel_id INT,
                  Project_status VARCHAR(50) NOT NULL CHECK(Project_status IN ('Pending','In progress','Completed','On hold')), 
                  CONSTRAINT client_project_foreign_key FOREIGN KEY (Client_id) REFERENCES Client(Client_id) ON DELETE CASCADE,
+                 CONSTRAINT personnel_project_foreign_key FOREIGN kEY (Personnel_id) REFERENCES Personnel(Personnel_id) ON DELETE CASCADE
                  );
             """
         cursor.execute(sql4)
@@ -122,7 +125,7 @@ class Database:
        
         conn.commit()
 
-    def delete_tables(self):
+     def delete_tables(self):
         sql1="""
              DROP TABLE IF EXISTS Financials;
              """
@@ -154,7 +157,7 @@ class Database:
         cursor.execute(sql6)
 
         sql7="""
-             DROP TABLE IF EXISTS Client
+                  DROP TABLE IF EXISTS Client
              """ 
         cursor.execute(sql7)
         sql8="""
@@ -164,12 +167,69 @@ class Database:
 
         conn.commit()
 
-# db_obj=Database()
-# db_obj.delete_tables()
-# print("<------------THE TABLES HAVE BEEN DROPPED------------->")
-# print("<------------CREATING THE TABLES---------->")
-# db_obj.create_tables()
-# print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
+     def create_views(self):
+          #  suppliers view
+          # suppliers should be able to seee what materials/ equipment they are supplying
+
+          #  admin view
+          # admin should see everything
+          sql1="""
+               CREATE VIEW Admin_view AS 
+               SELECT Client_id,Client_name,CLient_phone_number
+          """
+          # client view
+          # client should see his name ,email,phone number , project name , project status , project budget
+
+          sql2="""
+               CREATE VIEW Client_view AS
+               SELECT Client_id , Client_name ,Client_phone_number ,
+               FROM Client;
+          """
+
+          # personnel view
+          # personnel should see his name, his wages his role and sub role, he should also know which project he is working on
+          sql3="""
+               CREATE VIEW Personnel_view AS 
+               SELECT Personnel_name , Personnel_wages, Personnel_role,
+               sub_role
+          """
+          
+          # finance view
+          sql4 = """
+               CREATE VIEW Finance_view AS 
+               SELECT Transaction_type,Transaction_date,Personnel_id,Project_id,Client_id,Supplier_id
+               """
+     
+     def delete_views(self):
+          sql1=" DROP VIEW IF EXISTS admin_view ; "
+          cursor.execute(sql1)
+
+          sql2="""
+               DROP VIEW IF EXISTS Personnel_view ;
+               """
+          cursor.execute(sql2)
+          sql3="""
+               DROP VIEW IF EXISTS Client_view ;
+                    """
+          cursor.execute(sql3)
+          sql4="""
+               DROP VIEW IF EXISTS Finance_view ;
+               """
+          cursor.execute(sql4)
+          cursor.commit()
+               
+
+
+db_obj=Database()
+db_obj.delete_tables()
+db_obj.delete_views()
+print("<------------THE TABLES HAVE BEEN DROPPED------------->")
+print("<------------THE VIEWS HAVE BEEN DROPPED------------->")
+print("<------------CREATING THE TABLES---------->")
+db_obj.create_tables()
+db_obj.create_views()
+print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
+print("<------------THE TABLES HAVE BEEN CREATED------------->")
 
 # cursor.close()
 # conn.close()
