@@ -15,153 +15,148 @@ print("<-----------------Connection successful----------------->")
 class Database:
      def create_tables(self):
         sql1="""
-               CREATE TABLE Client(
-                    Client_id INT IDENTITY(1,1) PRIMARY KEY,
-                    Client_name VARCHAR(50) NOT NULL UNIQUE,
-                    Client_email VARCHAR(100) NOT NULL UNIQUE,
-                    Client_phone_number VARCHAR(10) NOT NULL UNIQUE,
-                    Client_identity_number VARCHAR(9) NOT NULL UNIQUE,
-
-                    CONSTRAINT check_email CHECK(Client_email LIKE '%@%.%'),
-                    CONSTRAINT check_phone_number CHECK(Client_phone_number LIKE '07%' AND LEN(Client_phone_number) = 10),
-                    CONSTRAINT check_identity_number CHECK (LEN(Client_identity_number) BETWEEN 8 AND 9)
-               );               
+          CREATE TABLE Client(
+               Id INT IDENTITY(1,1) PRIMARY KEY,
+               Name VARCHAR(50) NOT NULL ,
+               Email VARCHAR(100) NOT NULL UNIQUE,
+               Phone_Number VARCHAR(13) NOT NULL UNIQUE,
+               National_Identity_Number VARCHAR(9) NOT NULL UNIQUE,
+               CONSTRAINT Client_check_email CHECK(Email LIKE '%_@%_.__%' AND Email NOT LIKE '%@%@%' AND Email NOT LIKE '%..%'),
+               CONSTRAINT  Client_check_phone CHECK(Phone_Number LIKE '+254%' AND LEN(Phone_Number) = 13 AND Phone_Number NOT LIKE '%[^0-9]%'),
+               CONSTRAINT Client_check_identity CHECK (LEN(National_Identity_Number) BETWEEN 8 AND 9 AND National_Identity_Number NOT LIKE '%[^0-9]%')
+          );               
              """
         cursor.execute(sql1)
 
         sql2="""
-               CREATE TABLE Suppliers(
-                    Supplier_id INT IDENTITY(1,1) PRIMARY KEY,
-                    Supplier_name VARCHAR(100) NOT NULL UNIQUE,
-                    Supplier_email VARCHAR(100) NOT NULL UNIQUE,
-                    Supplier_phone_number VARCHAR(10) NOT NULL UNIQUE,
-                    Supplier_identity_number VARCHAR(9) NOT NULL UNIQUE,
-                    Supplier_status VARCHAR(20) NOT NULL,
-                    Remaining_amount DECIMAL(15,2) NOT NULL,
-
-                    CONSTRAINT check_supplier_email CHECK(Supplier_email LIKE '%_@__%.__%'),
-                    CONSTRAINT check_supplier_phone_number CHECK(Supplier_phone_number LIKE '07%' AND LEN(Supplier_phone_number) = 10),
-                    CONSTRAINT check_supplier_identity_number CHECK(LEN(Supplier_identity_number) BETWEEN 8 AND 9),
-                    CONSTRAINT check_status CHECK(Supplier_status IN ('Active','Inactive','Pending','Suspended')),
-                    CONSTRAINT check_remaining_amount CHECK(Remaining_amount >= 0.00)
-              ); 
+          CREATE TABLE Suppliers(
+               Id INT IDENTITY(1,1) PRIMARY KEY,
+               Name VARCHAR(100) NOT NULL ,
+               Email VARCHAR(100) NOT NULL UNIQUE,
+               Phone_Number VARCHAR(13) NOT NULL UNIQUE,
+               Status VARCHAR(20) NOT NULL,
+               Remaining_amount DECIMAL(15,2) NOT NULL,
+               CONSTRAINT Suppliers_check_email CHECK(Email LIKE '%_@%_.__%' AND Email NOT LIKE '%@%@%' AND Email NOT LIKE '%..%'),
+               CONSTRAINT Suppliers_check_phone CHECK(Phone_Number LIKE '+254%' AND LEN(Phone_Number) = 13 AND Phone_Number NOT LIKE '%[^0-9]%'),
+               CONSTRAINT Suppliers_check_status  CHECK(Status IN ('Active','Inactive','Pending','Suspended')),
+               CONSTRAINT check_Remaining_amount CHECK( Remaining_amount >= 0.00 ) 
+          ); 
             """
         cursor.execute(sql2)
         
         sql3="""
-               CREATE TABLE Personnel(
-                    Personnel_id INT IDENTITY(1,1) PRIMARY KEY, 
-                    Personnel_name VARCHAR(50) NOT NULL UNIQUE,
-                    Personnel_identity_number VARCHAR(9) NOT NULL UNIQUE,
-                    Personnel_code VARCHAR(50) NOT NULL UNIQUE,
-                    Personnel_wages DECIMAL(15,2) NOT NULL,
-                    Personnel_type VARCHAR(50) NOT NULL,
-                    Personnel_role VARCHAR(50) NOT NULL,
-
-                    CONSTRAINT check_personnel_identity_number CHECK (LEN(Personnel_identity_number) BETWEEN 8 AND 9),
-                    CONSTRAINT check_personnel_type CHECK (Personnel_type IN ('Professional','Skilled','Unskilled')),                     
-                    CONSTRAINT check_personnel_wages CHECK (Personnel_wages >= 0.00),
-                    CONSTRAINT check_personnel_role CHECK(
-                    (Personnel_type = 'Professional' AND Personnel_role IN (
-                    'Project Manager','Architect','Structural Engineer','Quantity Surveyor','Mechanical Engineer','Electrical Engineer','Site Supervisor)) OR
-                    (Personnel_type = 'Skilled' AND Personnel_role IN ('Mason','Plumber','Electrician','Carpenter','Welder', 'Painter','Roofer'))   OR
-                    (Personnel_type = 'Unskilled' AND Personnel_role IN ('Laborer'))
-                    ),
-                    CONSTRAINT check_personnel_code CHECK (
-                    (Personnel_type = 'Professional' AND Personnel_code LIKE 'P[A-Z][A-Z][0-9][0-9][0-9]') OR
-                    (Personnel_type = 'Skilled' AND Personnel_code LIKE 'S[A-Z][A-Z][0-9][0-9][0-9]') OR
-                    (Personnel_type = 'Unskilled' AND Personnel_code LIKE 'U[A-Z][A-Z][0-9][0-9][0-9]')
-                    )
-
+          CREATE TABLE Personnel(
+               Id INT IDENTITY(1,1) PRIMARY KEY, 
+               Name VARCHAR(50) NOT NULL ,
+               National_Identity_Number VARCHAR(9) NOT NULL UNIQUE,
+               Type VARCHAR(15) NOT NULL,
+               Wages DECIMAL(15,2) NOT NULL,
+               Role VARCHAR(25) NOT NULL,
+               Code VARCHAR(6) NOT NULL UNIQUE,
+               CONSTRAINT check_identity_Number CHECK (LEN(National_Identity_Number) BETWEEN 8 AND 9 AND National_Identity_Number NOT LIKE '%[^0-9]%'),
+               CONSTRAINT check_type CHECK (Type IN ('Professional','Skilled','Unskilled')),                     
+               CONSTRAINT check_wages CHECK (Wages >= 0.00),
+               CONSTRAINT check_role CHECK( 
+               (Type = 'Professional' AND Role IN ('Project Manager','Architect','Structural Engineer','Quantity Surveyor','Mechanical Engineer','Electrical Engineer','Site Supervisor'))OR
+               (Type = 'Skilled' AND Role IN ('Mason','Plumber','Electrician','Carpenter','Welder', 'Painter','Roofer'))OR
+               (Type = 'Unskilled' AND Role IN ('Laborer'))
+               ),
+               CONSTRAINT check_code CHECK (
+               (Type = 'Professional' AND Code LIKE 'P[A-Z][A-Z][0-9][0-9][0-9]') OR
+               (Type = 'Skilled' AND Code LIKE 'S[A-Z][A-Z][0-9][0-9][0-9]') OR
+               (Type = 'Unskilled' AND Code LIKE 'U[A-Z][A-Z][0-9][0-9][0-9]')
+               )
              );
            """
         cursor.execute(sql3)
 
         sql4="""
-                 CREATE TABLE Projects(
-                 Project_id INT IDENTITY(1,1) PRIMARY KEY,
-                 Client_id INT NOT NULL,
-                 Personnel_id INT NOT NULL,
-                 Project_name VARCHAR(100) NOT NULL UNIQUE,
-                 Project_start_date DATE NOT NULL,
-                 Project_end_date DATE NOT NULL,
-                 Project_budget DECIMAL(15,2) NOT NULL,
-                 Project_status VARCHAR(10) NOT NULL,
-
- 
-                 CONSTRAINT client_project_foreign_key FOREIGN KEY (Client_id) REFERENCES Client(Client_id) ON DELETE CASCADE,
-                 CONSTRAINT personnel_project_foreign_key FOREIGN KEY (Personnel_id) REFERENCES Personnel(Personnel_id) ON DELETE CASCADE,
-                 CONSTRAINT check_project_budget CHECK ( Project_budget >= 0.00),
-                 CONSTRAINT check_project_status CHECK ( Project_status IN ('Pending','In progress','Completed','On hold','Cancelled'),)
-                 CONSTRAINT Check_project_date CHECK (Project_end_date > Project_start_date)
-                 );
+          CREATE TABLE Projects(
+               Id INT IDENTITY(1,1) PRIMARY KEY,
+               Client_id INT NOT NULL,
+               Personnel_id INT NOT NULL,
+               Name VARCHAR(100) NOT NULL UNIQUE,
+               Budget DECIMAL(15,2) NOT NULL,
+               Status VARCHAR(10) NOT NULL,
+               Start_date DATE NOT NULL,
+               End_date DATE NOT NULL,  
+               CONSTRAINT client_foreign_key_1 FOREIGN KEY (Client_id) REFERENCES Client(Id) ON DELETE NO ACTION,
+               CONSTRAINT personnel_foreign_key_1 FOREIGN KEY (Personnel_id) REFERENCES Personnel(Id) ON DELETE NO ACTION,
+               CONSTRAINT check_budget CHECK ( Budget >= 0.00),
+               CONSTRAINT Projects_check_status CHECK ( Status IN ('Pending','In progress','Completed','On hold','Cancelled')),
+               CONSTRAINT Projects_check_date CHECK (End_date > Start_date)
+          );
             """
         cursor.execute(sql4)
 
         sql5="""
-              CREATE TABLE Certification(
-                Certification_id INT IDENTITY(1,1) PRIMARY KEY,
-                Personnel_id INT NOT NULL ,
-                Certification_number VARCHAR(100) NOT NULL UNIQUE,
-                Certification_name VARCHAR(150) NOT NULL,
-                Certification_expiry_date DATE NOT NULL,
-                Certification_status VARCHAR(20) NOT NULL DEFAULT 'Active',
-
-
-                CONSTRAINT personnel_certification_foreign_key FOREIGN KEY (Personnel_id) REFERENCES Personnel(Personnel_id) ON DELETE CASCADE,
-                CONSTRAINT check_certification_expiry_date CHECK (Certfification_expiry_date > GETDATE()),
-                CONSTRAINT check_certification_status CHECK (Certification_status IN ('Active','Expired','Revoked','Pending')),
-                CONSTRAINT check_skilled_personnel_only CHECK (
-            EXISTS (
-                SELECT 1 FROM Personnel p 
-                WHERE p.Personnel_id = Personnel_id 
-                AND p.Personnel_type = 'Skilled'
-            )
-        )
-              );
+          CREATE TABLE Certification(
+               Id INT IDENTITY(1,1) PRIMARY KEY,
+               Personnel_id INT NOT NULL ,
+               Number VARCHAR(50) NOT NULL UNIQUE,
+               Name VARCHAR(100) NOT NULL,
+               Expiry_date DATE NOT NULL,
+               Status VARCHAR(20) NOT NULL DEFAULT 'Active',
+               CONSTRAINT personnel_foreign_key_2 FOREIGN KEY (Personnel_id) REFERENCES Personnel(Id) ON DELETE CASCADE,
+               CONSTRAINT Certification_check_expiry_date CHECK (Expiry_date > GETDATE()),
+               CONSTRAINT Certification_check_status CHECK (status IN ('Active','Expired','Revoked','Pending'))
+          );
              """
         cursor.execute(sql5)
 
         sql6="""
-              CREATE TABLE Equipment(
-                Equipment_id INT IDENTITY(1,1) PRIMARY KEY,
-                Supplier_id INT NOT NULL,
-                Equipment_name VARCHAR(20) NOT NULL,
-                Equipment_quantity INT NOT NULL,
-                Equipment_code VARCHAR(50) NOT NULL UNIQUE,
-                Date_Bought DATE NOT NULL,
-                Equipment_status VARCHAR(20) CHECK (Equipment_status IN ('Active', 'In Repair', 'Retired')),
-                CONSTRAINT supplier_equipment_foreign_key FOREIGN KEY (Supplier_id) REFERENCES Suppliers(Supplier_id)
-              );
+          CREATE TABLE Equipment(
+               Id INT IDENTITY(1,1) PRIMARY KEY,
+               Supplier_id INT NOT NULL,
+               Name VARCHAR(50) NOT NULL,
+               Quantity INT NOT NULL,
+               Code VARCHAR(50) NOT NULL UNIQUE,
+               Date_Bought DATE NOT NULL,
+               Status VARCHAR(20) NOT NULL DEFAULT 'Active'  -- Comma removed here
+               CONSTRAINT Equipment_check_status CHECK (Status IN ('Active','In Repair','Retired')),
+               CONSTRAINT supplier_foreign_key_1 FOREIGN KEY (Supplier_id) REFERENCES Suppliers(Id) ON DELETE NO ACTION,
+               CONSTRAINT  Equipment_check_quantity CHECK (Quantity >= 0),
+               CONSTRAINT Equipment_check_code CHECK (
+                    Code LIKE 'EQ-[A-Z0-9]%' 
+                    AND LEN(Code) >= 7          
+                    AND Code NOT LIKE '%[^A-Z0-9-]%'
+               ), 
+               CONSTRAINT unique_equipment_supplier UNIQUE (Supplier_id, Name)
+          );
             """
         cursor.execute(sql6)
         sql7="""
-             CREATE TABLE Materials(
-               Material_id INT IDENTITY(1,1) PRIMARY KEY,
+          CREATE TABLE Materials(
+               Id INT IDENTITY(1,1) PRIMARY KEY,
                Supplier_id INT NOT NULL,
-               Material_name VARCHAR(50) NOT NULL,
-               Material_quantity INTEGER NOT NULL,
-               Material_price DECIMAL(15,2)  NOT NULL,
-               Material_status VARCHAR(20) CHECK (Material_status IN ('Available','Not Available')),
-               CONSTRAINT supplier_material_foreign_key FOREIGN KEY(Supplier_id) REFERENCES Suppliers(Supplier_id) ON DELETE CASCADE
-             );
+               Name VARCHAR(50) NOT NULL,
+               Quantity INT NOT NULL,
+               Price DECIMAL(15,2)  NOT NULL,
+               Status VARCHAR(20) NOT NULL DEFAULT 'Available',
+               CONSTRAINT Materials_check_status  CHECK (Status IN ('Available','Not Available')),  
+               CONSTRAINT check_quantity CHECK (Quantity >= 0),
+               CONSTRAINT check_Price CHECK (Price >= 0),
+               CONSTRAINT unique_material_supplier UNIQUE (Supplier_id, Name)
+          );
              """
         cursor.execute(sql7)
         
         sql8="""
              CREATE TABLE Financials (
-              Transaction_id INT IDENTITY(1,1) PRIMARY KEY,
-              Transaction_type VARCHAR(25) NOT NULL CHECK( Transaction_type IN ('Personnel Wages','Supplier Payments','Client Payments')),
-              Transaction_amount DECIMAL(15,2) NOT NULL,
-              Transaction_date DATE NOT NULL,
+              Id INT IDENTITY(1,1) PRIMARY KEY,
               Personnel_id INT,
               Project_id INT,
               Client_id INT,
               Supplier_id INT,
-              CONSTRAINT personnel_financials_foreign_key FOREIGN KEY (Personnel_id) REFERENCES Personnel(Personnel_id)  ,
-              CONSTRAINT project_financials_foreign_key FOREIGN KEY(Project_id) REFERENCES Projects(Project_id) ,
-              CONSTRAINT client_financials_foreign_key FOREIGN KEY(Client_id) REFERENCES Client(Client_id) ,
-              CONSTRAINT supplier_financials_foreign_key FOREIGN KEY(Supplier_id) REFERENCES Suppliers(Supplier_id) 
+              Type VARCHAR(25) NOT NULL,
+              Amount DECIMAL(15,2) NOT NULL,
+              Transaction_date DATE NOT NULL,
+              CONSTRAINT personnel_financials_foreign_key FOREIGN KEY (Personnel_id) REFERENCES Personnel(Id) ON DELETE SET NULL ,
+              CONSTRAINT project_financials_foreign_key FOREIGN KEY(Project_id) REFERENCES Projects(Id) ON DELETE SET NULL,
+              CONSTRAINT client_financials_foreign_key FOREIGN KEY(Client_id) REFERENCES Client(Id) ON DELETE SET NULL,
+              CONSTRAINT supplier_financials_foreign_key FOREIGN KEY(Supplier_id) REFERENCES Suppliers(Id) ON DELETE SET NULL, 
+              CONSTRAINT Financials_check_type CHECK( Type IN ('Personnel Wages','Supplier Payments','Client Payments')),
+              CONSTRAINT check_amount CHECK(Amount > 0)
              );
              """
         cursor.execute(sql8)
@@ -195,16 +190,16 @@ class Database:
         cursor.execute(sql5)
 
         sql6="""
-             DROP TABLE IF EXISTS Personnel
+             DROP TABLE IF EXISTS Personnel;
              """
         cursor.execute(sql6)
 
         sql7="""
-                  DROP TABLE IF EXISTS Client
+                  DROP TABLE IF EXISTS Client;
              """ 
         cursor.execute(sql7)
         sql8="""
-             DROP TABLE IF EXISTS Suppliers
+             DROP TABLE IF EXISTS Suppliers;
              """
         cursor.execute(sql8)
 
@@ -217,30 +212,57 @@ class Database:
           #  admin view
           # admin should see everything
           sql1="""
-               CREATE VIEW Admin_view AS 
-               SELECT Client_id,Client_name,CLient_phone_number
+               CREATE VIEW Admin_view AS
+               SELECT 
+               c.Id AS ClientID, c.Name AS ClientName, c.Email, c.Phone_Number,
+               s.Id AS SupplierID, s.Name AS SupplierName, s.Status AS SupplierStatus,
+               p.Id AS ProjectID, p.Name AS ProjectName, p.Budget, p.Status AS ProjectStatus,
+               per.Name AS PersonnelName, per.Role AS PersonnelRole,
+               fin.Type AS TransactionType, fin.Amount, fin.Transaction_date
+               FROM Client c
+               LEFT JOIN Projects p ON c.Id = p.Client_id
+               LEFT JOIN Personnel per ON p.Personnel_id = per.Id
+               LEFT JOIN Financials fin ON c.Id = fin.Client_id
+               LEFT JOIN Suppliers s ON fin.Supplier_id = s.Id;
           """
           # client view
           # client should see his name ,email,phone number , project name , project status , project budget
 
           sql2="""
                CREATE VIEW Client_view AS
-               SELECT Client_id , Client_name ,Client_phone_number ,
-               FROM Client;
+               SELECT 
+               c.Name AS ClientName, c.Email, c.Phone_Number,
+               p.Name AS ProjectName, p.Status AS ProjectStatus, p.Budget,
+               p.Start_date, p.End_date
+               FROM Client c
+               LEFT JOIN Projects p ON c.Id = p.Client_id;
           """
 
           # personnel view
           # personnel should see his name, his wages his role and sub role, he should also know which project he is working on
           sql3="""
-               CREATE VIEW Personnel_view AS 
-               SELECT Personnel_name , Personnel_wages, Personnel_role,
-               sub_role
+               CREATE VIEW Personnel_view AS
+               SELECT 
+               per.Name AS PersonnelName, per.Wages, per.Role,
+               p.Name AS ProjectName, p.Status AS ProjectStatus
+               FROM Personnel per
+               LEFT JOIN Projects p ON per.Id = p.Personnel_id;
           """
           
           # finance view
           sql4 = """
-               CREATE VIEW Finance_view AS 
-               SELECT Transaction_type,Transaction_date,Personnel_id,Project_id,Client_id,Supplier_id
+               CREATE VIEW Finance_view AS
+               SELECT 
+               f.Type, f.Amount, f.Transaction_date,
+               c.Name AS ClientName,
+               s.Name AS SupplierName,
+               per.Name AS PersonnelName,
+               p.Name AS ProjectName
+               FROM Financials f
+               LEFT JOIN Client c ON f.Client_id = c.Id
+               LEFT JOIN Suppliers s ON f.Supplier_id = s.Id
+               LEFT JOIN Personnel per ON f.Personnel_id = per.Id
+               LEFT JOIN Projects p ON f.Project_id = p.Id;
                """
      
      def delete_views(self):
@@ -274,6 +296,6 @@ db_obj.create_views()
 print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
 print("<------------THE TABLES HAVE BEEN CREATED------------->")
 
-# conn.close()
-# conn.close()
+conn.commit()
+conn.close()
     
