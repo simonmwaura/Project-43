@@ -22,7 +22,8 @@ class Database:
                Phone_Number VARCHAR(13) NOT NULL UNIQUE,
                National_Identity_Number VARCHAR(9) NOT NULL UNIQUE,
                CONSTRAINT Client_check_email CHECK(Email LIKE '%_@%_.__%' AND Email NOT LIKE '%@%@%' AND Email NOT LIKE '%..%'),
-               CONSTRAINT  Client_check_phone CHECK(Phone_Number LIKE '+254%' AND LEN(Phone_Number) = 13 AND Phone_Number NOT LIKE '%[^0-9]%'),
+
+               CONSTRAINT  Client_check_phone CHECK(Phone_Number LIKE '+254%' AND LEN(Phone_Number) = 13),
                CONSTRAINT Client_check_identity CHECK (LEN(National_Identity_Number) BETWEEN 8 AND 9 AND National_Identity_Number NOT LIKE '%[^0-9]%')
           );               
              """
@@ -37,7 +38,7 @@ class Database:
                Status VARCHAR(20) NOT NULL,
                Remaining_amount DECIMAL(15,2) NOT NULL,
                CONSTRAINT Suppliers_check_email CHECK(Email LIKE '%_@%_.__%' AND Email NOT LIKE '%@%@%' AND Email NOT LIKE '%..%'),
-               CONSTRAINT Suppliers_check_phone CHECK(Phone_Number LIKE '+254%' AND LEN(Phone_Number) = 13 AND Phone_Number NOT LIKE '%[^0-9]%'),
+               CONSTRAINT Suppliers_check_phone CHECK(Phone_Number LIKE '+254%' AND LEN(Phone_Number) = 13),
                CONSTRAINT Suppliers_check_status  CHECK(Status IN ('Active','Inactive','Pending','Suspended')),
                CONSTRAINT check_Remaining_amount CHECK( Remaining_amount >= 0.00 ) 
           ); 
@@ -331,16 +332,16 @@ class Database:
 
 
 db_obj=Database()
-db_obj.delete_tables()
-db_obj.delete_views()
-print("<------------THE TABLES HAVE BEEN DROPPED------------->")
-print("<------------THE VIEWS HAVE BEEN DROPPED------------->")
-print("<------------CREATING THE TABLES---------->")
-db_obj.create_tables()
-db_obj.create_views()
-print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
-print("<------------THE TABLES HAVE BEEN CREATED------------->")
+# db_obj.delete_tables()
+# db_obj.delete_views()
+# print("<------------THE TABLES HAVE BEEN DROPPED------------->")
+# print("<------------THE VIEWS HAVE BEEN DROPPED------------->")
+# print("<------------CREATING THE TABLES---------->")
+# db_obj.create_tables()
+# db_obj.create_views()
+# print("<-------------THE TABLES HAVE BEEN CREATED-------------->")
+# print("<------------THE TABLES HAVE BEEN CREATED------------->")
 
-conn.commit()
-conn.close()
+# conn.commit()
+# conn.close()
     

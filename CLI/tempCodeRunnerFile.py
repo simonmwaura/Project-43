@@ -92,7 +92,7 @@ def Client_operations():
             print(f"\n Client with id {Client_id} updated successfully")
 
         elif choice=="3":
-            Client_id =input("Enter client id to fetch: \n")
+            Client_id =input("Enter client id to fetch:  ")
             single_client = client.fetch_single_client(Client_id)
             print(single_client)
 

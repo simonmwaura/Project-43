@@ -64,9 +64,9 @@ def Client_operations():
         print("|------------------------------------------------------|")
         print("|    1.Add Client                                      |")
         print("|    2.Update Client                                   |")
-        print("|    3.Fetch Client by id                              |")
+        print("|    3.Fetch Client by Name                            |")
         print("|    4.Fetch all Clients                               |")
-        print("|    5.Delete Client                                   |")
+        print("|    5.Delete Client by Name                           |")
         print("|    6.Return to main menu                             |")
         print("|------------------------------------------------------|")
 
@@ -74,37 +74,56 @@ def Client_operations():
 
         client=Client()
         if choice=="1":
-            Client_name = input("Enter your name: ")
-            Client_email = input("Enter your email: ")
-            Client_phone_number = input("Enter your phone number: ")
-            Client_identity_number = input("Enter your identity number: ")
-            Client_id = client.create_client(Client_name, Client_email, Client_phone_number, Client_identity_number)
-            print(f"\nClient with id {Client_id} was added successfully")
+            name = input("Enter client name: ").strip().upper()
+            email = input("Enter client email: ").strip()
+            phone_number = input("Enter phone number (+254XXXXXXXXX): ").strip()
+            identity_number = input("Enter national identity number: ").strip()
+
+            client_id = client.create_client(name, email, phone_number, identity_number)
+            print(f"\nClient created successfully! ID: {client_id}")
 
         elif choice=="2":
-            Client_id=input("Input the client id that you want to update: ")
-            Client_name = input("Input the new client name: ")
-            Client_email= input("Input the new client email: ")
-            Client_phone_number=input("Input the new client phone number: ")
-            Client_identity_number=input("Input the new client identity number: ")
+            old_name=input("Enter current client name: ").strip().upper()
+            new_name = input("Enter new name: ").strip().upper() 
+            new_email = input("Enter new email: ").strip() 
+            new_phone_number = input("Enter new phone number (+254XXXXXXXXX): ").strip()  
+            new_identity_number = input("Enter new identity number: ").strip() 
+            
+            Client.update_single_client(old_name, new_name, new_email, new_phone_number, new_identity_number)
 
-            Client_id=Client.update_single_client(Client_id,Client_name, Client_email, Client_phone_number, Client_identity_number)
-            print(f"\n Client with id {Client_id} updated successfully")
+            print(f"Client '{old_name}' updated to '{new_name}' successfully")
 
         elif choice=="3":
-            Client_id =input("Enter client id to fetch: \n")
-            single_client = client.fetch_single_client(Client_id)
-            print(single_client)
-
+            fetch_name =input("Enter client name to fetch: ").strip().upper()
+            client_data = client.fetch_single_client(fetch_name)
+            if client_data:
+                print("\nClient Details:")
+                print(f"ID: {client_data[0]}")
+                print(f"Name: {client_data[1]}")
+                print(f"Email: {client_data[2]}")
+                print(f"Phone: {client_data[3]}")
+                print(f"National ID: {client_data[4]}")
+            else:
+                print("\nNo client found with that name")
         elif choice =="4":
             all_clients=client.fetch_all_clients()
             print("\n All Users \n")
-            print(all_clients)
+            print("-" * 90)
+            print(f"{'ID':<5}{'Name':<20}{'Email':<25}{'Phone':<15}{'National ID':<15}")
+            print("-" * 90)
+            for client_data in all_clients:
+                print(f"{client_data[0]:<5}"  
+                    f"{client_data[1]:<20}"  
+                    f"{client_data[2]:<25}"  
+                    f"{client_data[3]:<15}"  
+                    f"{client_data[4]:<15}")  
+            print("-" * 90)
+            print(f"Total clients: {len(all_clients)}\n")
         
         elif choice == "5":
-            Client_id=input("Enter client id to delete: ")
-            deleted_client_id=client.delete_single_user(Client_id)
-            print(f"Client with id {deleted_client_id} deleted successfully.")
+            delete_name =input("Enter client name to delete: ").strip().upper()
+            delete_results=client.delete_single_client(delete_name)
+            print(f"Client with name : {delete_results} deleted successfully.")
             
         elif choice == "6":
             return main_menu() 
