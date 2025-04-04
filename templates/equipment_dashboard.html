@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Kaiadmin - Bootstrap 5 Admin Dashboard</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="/assets/img/kaiadmin/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["/assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="/assets/css/kaiadmin-min.css" />
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="/assets/css/demo.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+            <a href="index.html" class="logo">
+              <img
+                src="/assets/img/kaiadmin/logo_light.svg"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              />
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item active">
+                <a
+                  data-bs-toggle="collapse"
+                  href="#dashboard"
+                  class="collapsed"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-tv"></i>
+                  <p>Dashboards</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="dashboard">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="/suppiers/dashboard">
+                        <span class="sub-item">Supply Manager Dashboard</span>
+                      </a>
+                      <a href="/materials/dashboard">
+                        <span class="sub-item">Manage Materials Dashboard</span>
+                      </a>
+                      <a href="/equipment/dashboard">
+                        <span class="sub-item">Manage Equipment Dashboard</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+              <a href="index.html" class="logo">
+                <img
+                  src="/assets/img/kaiadmin/logo_light.svg"
+                  alt="navbar brand"
+                  class="navbar-brand"
+                  height="20"
+                />
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+          <!-- Navbar Header -->
+          <nav
+            class="navbar navbar-header navbar-header-transparent navbar-expand-lg"
+          >
+            <div class="container-fluid">
+             
+
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li
+                  class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none"
+                >
+                  <a
+                    class="nav-link dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    role="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                  >
+                    <i class="fa fa-search"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-search animated fadeIn">
+                    <form class="navbar-left navbar-form nav-search">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          placeholder="Search ..."
+                          class="form-control"
+                        />
+                      </div>
+                    </form>
+                  </ul>
+                </li>              
+
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                  <a
+                    class="dropdown-toggle profile-pic"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-sm">
+                      <img
+                        src="/assets/img/kaiadmin/p.webp"
+                        alt="..."
+                        class="avatar-img rounded-circle"
+                      />
+                    </div>
+                    <span class="profile-username">
+                      <span class="fs-5 op-1">Hi,</span>
+                      <span class="fs-5 fw-bold">{{ user }}</span>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                      <li>
+                        <div class="user-box">
+                          <div class="avatar-lg">
+                            <img
+                              src="/assets/img/kaiadmin/p.webp"
+                              alt="image profile"
+                              class="avatar-img rounded"
+                            />
+                          </div>
+                          <div class="u-text">
+                            <h4>Hizrian</h4>
+                            <p class="text-muted">hello@example.com</p>
+                            
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Logout</a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+        </div>
+
+        <div class="container">
+          <div class="page-inner">
+            <div
+              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+            >
+              <div>
+                <h2 class="fw-bold mb-3">SLS Equipment Dashboard</h2>
+
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round" style="background-color: #FAFAFA;">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-primary bubble-shadow-small"
+                        >
+                          <i class="fas fa-archive"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category text-muted">Unit Equipment</p>
+                          <h4 class="card-title">1,294</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round" style="background-color: #FAFAFA;">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-info bubble-shadow-small"
+                        >
+                          <i class="fas fa-box-open"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category text-muted">Equipment In Use</p>
+                          <h4 class="card-title">1303</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round" style="background-color: #FAFAFA;">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-danger bubble-shadow-small"
+                        >
+                          <i class="fas fa-money-bill"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category text-muted">Total Equipment</p>
+                          <h4 class="card-title">$ 1,345</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3 mb-4">
+                <div class="card card-stats card-round" style="background-color: #FAFAFA; height: 90%; display: flex; align-items: center; justify-content: center;">
+                  <div class="card-body text-center icon-big ">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal" style="font-size: medium;">
+                      <i class="fas fa-plus"></i> Add Equipment
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Add Supplier Modal -->
+              <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="addSupplierModalLabel">Add New Equipment</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="mb-3">
+                          <label for="supplierID" class="form-label">Supplier ID</label>
+                          <input type="text" class="form-control" id="supplierID">
+                        </div>
+                        <div class="mb-3">
+                          <label for="EquipmentName" class="form-label">Equipment Name</label>
+                          <input type="text" class="form-control" id="EquipmentName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="EquipmentQ" class="form-label">Equipment Quantity</label>
+                            <input type="text" class="form-control" id="EquipmentQ">
+                          </div>
+                          <div class="mb-3">
+                            <label for="EquipmentDate" class="form-label">Purchase Date</label>
+                            <input type="text" class="form-control" id="EquipmentPrice">
+                          </div>
+                        <div class="mb-3">
+                          <label for="EquipmentStatus" class="form-label">Equipment Status</label>
+                          <select class="form-control" id="EquipmentStatus">
+                            <option>Available</option>
+                            <option>In Repair</option>
+                          </select>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save Equipment</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+            <div class="col-md-12">
+              <div class="card card-round">
+                <div class="card-header">
+                  <div class="card-head-row card-tools-still-right">
+                    <div class="card-title">Equipment Payments</div>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table align-items-center mb-0">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Equipment ID</th>
+                          <th scope="col">Supplier ID</th>
+                          <th scope="col">Equipment Name</th>
+                          <th scope="col">Equipment Quantity</th>
+                          <th scope="col">Purchase Date</th>
+                          <th scope="col" class="text-end">Equipment Status</th>
+                          <th scope="col" class="text-center">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for equipment in equipments %}
+                        <tr>
+                     
+                          <th scope="row">{{ equipment.id }}</th>
+                          <td>{{ equipment.supplier_id }}</td>
+                          <td>{{ equipment.name }}</td>
+                          <td>{{ equipment.quantity }}</td>
+                          <td>{{ equipment.purchase_date }}</td>
+                          <td class="text-end"><span class="badge badge-{% if equipment.status == 'Available' %}success{% elif equipment.status == 'In Repair' %}danger{% else %}warning{% endif %}">{{ equipment.status }}</span></td>
+                          <td class="text-center">
+                            <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" 
+                              onclick="populateEditForm('{{ equipment.id }}', '{{ equipment.supplier_id }}', '{{ equipment.name }}', '{{ equipment.quantity }}', '{{ equipment.purchase_aate }}', '{{ equipment.status }}')">
+                              <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ equipment.id }}')">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Equipment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="EquipmentID" class="form-label">Equipment Name</label>
+                            <input type="text" class="form-control" id="EquipmentID" readonly>
+                          </div>
+                        <div class="mb-3">
+                          <label for="supplierID" class="form-label">Supplier ID</label>
+                          <input type="text" class="form-control" id="supplierID">
+                        </div>
+                        <div class="mb-3">
+                          <label for="EquipmentName" class="form-label">Equipment Name</label>
+                          <input type="text" class="form-control" id="EquipmentName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="EquipmentQ" class="form-label">Equipment Quantity</label>
+                            <input type="text" class="form-control" id="EquipmentQ">
+                          </div>
+                          <div class="mb-3">
+                            <label for="EquipmentDate" class="form-label">Purchase Date</label>
+                            <input type="text" class="form-control" id="EquipmentDate">
+                          </div>
+                        <div class="mb-3">
+                          <label for="EquipmentStatus" class="form-label">Equipment Status</label>
+                          <select class="form-control" id="EquipmentStatus">
+                            <option>Available</option>
+                            <option>In Repair</option>
+                          </select>
+                        </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <script>
+                     
+              function populateEditForm(id, supplier_id, name, quantity, date, status) {
+                document.getElementById("EquipmentID").value = id;
+                document.getElementById("supplierID").value = supplier_id;
+
+                document.getElementById("EquipmentName").value = name;
+                document.getElementById("EquipmentQ").value = quantity;
+
+                document.getElementById("EquipmentDate").value = date;
+                document.getElementById("EquipmentStatus").value = status;
+              }
+            
+              function confirmDelete(id) {
+                if (confirm("Are you sure you want to delete this supplier?")) {
+                  window.location.href = "/delete-supplier?id=" + id;
+                }
+              }
+            </script>    
+
+        <footer class="footer">
+          <div class="container-fluid d-flex justify-content-between">
+            <div class="copyright">
+              2025, made with <i class="fa fa-heart heart text-danger"></i> by
+              <a href="https://github.com/simonmwaura/Project-43">SLS</a>
+            </div>
+            <div>
+              Distributed by
+              <a target="_blank" href="https://github.com/liamthedux">LiamTheDux</a>.
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      
+    </div>
+    <!--   Core JS Files   -->
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+    <!-- <script src="/assets/js/core/jquery-3.7.1.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="/assets/js/core/popper.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="/assets/js/core/bootstrap.min.js"></script> -->
+
+    <!-- jQuery Scrollbar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.min.js" integrity="sha512-5AcaBUUUU/lxSEeEcruOIghqABnXF8TWqdIDXBZ2SNEtrTGvD408W/ShtKZf0JNjQUfOiRBJP+yHk6Ab2eFw3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script> -->
+
+    <!-- Chart JS -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+
+    <!-- Chart Circle -->
+    <script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+
+
+    <!-- Kaiadmin JS -->
+    <script src="/assets/js/kaiadmin.min.js"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="/assets/js/setting-demo.js"></script>
+    <script src="/assets/js/demo.js"></script>
+    
+  </body>
+</html>
