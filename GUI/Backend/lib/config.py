@@ -112,7 +112,7 @@ class Database:
                Quantity INT NOT NULL,
                Code VARCHAR(50) NOT NULL UNIQUE,
                Date_Bought DATE NOT NULL,
-               Status VARCHAR(20) NOT NULL DEFAULT 'Active'  -- Comma removed here
+               Status VARCHAR(20) NOT NULL DEFAULT 'Active' ,
                CONSTRAINT Equipment_check_status CHECK (Status IN ('Active','In Repair','Retired')),
                CONSTRAINT supplier_foreign_key_1 FOREIGN KEY (Supplier_id) REFERENCES Suppliers(Id) ON DELETE NO ACTION,
                CONSTRAINT  Equipment_check_quantity CHECK (Quantity >= 0),
@@ -212,76 +212,121 @@ class Database:
           #  admin view
           # admin should see everything
           sql1="""
-               CREATE VIEW Admin_view AS
+               CREATE VIEW admin_view AS
                SELECT 
-               c.Id AS ClientID, c.Name AS ClientName, c.Email, c.Phone_Number,
-               s.Id AS SupplierID, s.Name AS SupplierName, s.Status AS SupplierStatus,
-               p.Id AS ProjectID, p.Name AS ProjectName, p.Budget, p.Status AS ProjectStatus,
-               per.Name AS PersonnelName, per.Role AS PersonnelRole,
-               fin.Type AS TransactionType, fin.Amount, fin.Transaction_date
-               FROM Client c
-               LEFT JOIN Projects p ON c.Id = p.Client_id
-               LEFT JOIN Personnel per ON p.Personnel_id = per.Id
-               LEFT JOIN Financials fin ON c.Id = fin.Client_id
-               LEFT JOIN Suppliers s ON fin.Supplier_id = s.Id;
+               Client.Id AS Client_ID, 
+               Client.Name AS Client_Name, 
+               Client.Email AS Client_Email,
+               Client.Phone_Number AS Client_Phone_Number,
+               Suppliers.Id AS SupplierID, 
+               Suppliers.Name AS Supplier_Name, 
+               Suppliers.Status AS Supplier_Status,
+               Projects.Id AS ProjectID, 
+               Projects.Name AS Project_Name,
+               Projects.Budget AS Project_Budget,
+               Projects.Status AS Project_Status,
+               Personnel.Name AS Personnel_Name,
+               Personnel.Type AS Personnel_Type,
+               Personnel.Role AS Personnel_Role,
+               Financials.Type AS Transactions_Type, 
+               Financials.Amount AS Transaction_Amount, 
+               Financials.Transaction_date AS  Transaction_date
+               FROM Client
+               LEFT JOIN Projects  ON Client.Id = Projects.Client_id
+               LEFT JOIN Personnel ON Projects.Personnel_id = Personnel.Id
+               LEFT JOIN Financials ON Client.Id = Financials.Client_id
+               LEFT JOIN Suppliers  ON Financials.Supplier_id = Suppliers.Id;
           """
+          cursor.execute(sql1)
           # client view
           # client should see his name ,email,phone number , project name , project status , project budget
 
           sql2="""
-               CREATE VIEW Client_view AS
+               CREATE VIEW client_view AS
                SELECT 
-               c.Name AS ClientName, c.Email, c.Phone_Number,
-               p.Name AS ProjectName, p.Status AS ProjectStatus, p.Budget,
-               p.Start_date, p.End_date
-               FROM Client c
-               LEFT JOIN Projects p ON c.Id = p.Client_id;
+               Client.Name AS Client_Name, 
+               Client.Email AS Client_Email,
+               Client.Phone_Number AS Client_Phone_Number,
+               Projects.Name AS Project_Name,       
+               Projects.Status AS Project_Status,
+               Projects.Budget AS Project_Budget,
+               Projects.Start_date AS Project_Start_date , 
+               Projects.End_date AS Project_End_date
+               FROM Client LEFT JOIN Projects ON  Client.Id = Projects.Client_id;
           """
+
+          cursor.execute(sql2)
 
           # personnel view
           # personnel should see his name, his wages his role and sub role, he should also know which project he is working on
           sql3="""
-               CREATE VIEW Personnel_view AS
+               CREATE VIEW personnel_view AS
                SELECT 
-               per.Name AS PersonnelName, per.Wages, per.Role,
-               p.Name AS ProjectName, p.Status AS ProjectStatus
-               FROM Personnel per
-               LEFT JOIN Projects p ON per.Id = p.Personnel_id;
+               Personnel.Name AS Personnel_Name,
+               Personnel.Type AS Personnel_Type,
+               Personnel.Role AS Personnel_Role,
+               Personnel.Wages AS Personnel_Wages,
+               Projects.Name AS Projects_Name,
+               Projects.Status AS Project_Status
+               FROM Personnel LEFT JOIN Projects ON Personnel.Id = Projects.Personnel_id;
           """
+          cursor.execute(sql3)
           
           # finance view
           sql4 = """
-               CREATE VIEW Finance_view AS
+               CREATE VIEW finance_view AS
                SELECT 
-               f.Type, f.Amount, f.Transaction_date,
-               c.Name AS ClientName,
-               s.Name AS SupplierName,
-               per.Name AS PersonnelName,
-               p.Name AS ProjectName
-               FROM Financials f
-               LEFT JOIN Client c ON f.Client_id = c.Id
-               LEFT JOIN Suppliers s ON f.Supplier_id = s.Id
-               LEFT JOIN Personnel per ON f.Personnel_id = per.Id
-               LEFT JOIN Projects p ON f.Project_id = p.Id;
+               Financials.Type AS Financials_Type, 
+               Financials.Amount AS Financials_Amount, 
+               Financials.Transaction_date AS Transaction_date,
+               Client.Name AS Client_Name,
+               Suppliers.Name AS Supplier_Name,
+               Personnel.Name AS Personnel_Name,  
+               Projects.Name AS Project_Name
+               FROM Financials LEFT JOIN Client ON  Financials.Client_id = Client.Id LEFT JOIN Suppliers ON Financials.Supplier_id = Suppliers.Id LEFT JOIN Personnel ON Financials.Personnel_id = Personnel.Id LEFT JOIN Projects ON Financials.Project_id = Projects.Id;
                """
+          cursor.execute(sql4)
+          # Suppliers should see their supplied materials/equipment
+
+          sql5 = """
+               CREATE VIEW suppliers_view AS
+               SELECT 
+               Suppliers.Name AS Supplier_Name,
+               Suppliers.Email AS Supplier_Email,
+               Suppliers.Phone_Number AS Suppliers_Phone_Number,
+               Suppliers.Remaining_amount AS Suppliers_Remaining_Amount,
+               Materials.Name AS Materials_Name, 
+               Materials.Quantity AS Materials_Quantity,
+               Materials.Status AS Materials_Status,
+               Equipment.Name AS Equipment_Name,
+               Equipment.Quantity AS Equipment_Quantity,
+               Equipment.Status AS Equipment_Status
+               FROM Suppliers LEFT JOIN Materials ON Suppliers.Id = Materials.Supplier_id  LEFT JOIN Equipment  ON Suppliers.Id = Equipment.Supplier_id;
+               """
+          cursor.execute(sql5)
+          conn.commit()
      
      def delete_views(self):
           sql1=" DROP VIEW IF EXISTS admin_view ; "
           cursor.execute(sql1)
 
           sql2="""
-               DROP VIEW IF EXISTS Personnel_view ;
+               DROP VIEW IF EXISTS client_view ;
                """
           cursor.execute(sql2)
           sql3="""
-               DROP VIEW IF EXISTS Client_view ;
+               DROP VIEW IF EXISTS personnel_view ;
                     """
           cursor.execute(sql3)
           sql4="""
-               DROP VIEW IF EXISTS Finance_view ;
+               DROP VIEW IF EXISTS finance_view ;
                """
           cursor.execute(sql4)
-          cursor.commit()
+          sql5="""
+               DROP VIEW IF EXISTS suppliers_view ;
+               """
+          cursor.execute(sql5)
+          conn.commit()
                
 
 
