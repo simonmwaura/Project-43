@@ -41,11 +41,11 @@ class Database:
              CREATE TABLE Personnel(
               Personnel_id VARCHAR(25) PRIMARY KEY,
               Personnel_name VARCHAR(50) NOT NULL UNIQUE,
-              Personnel_identity_number INT NOT NULL UNIQUE,
               Personnel_code VARCHAR(50) NOT NULL UNIQUE,
               Personnel_wages DECIMAL(15,2) NOT NULL,
-              Personnel_type VARCHAR(50) NOT NULL CHECK(Personnel_type IN ('Professional','Skilled','Unskilled')),
               Personnel_role VARCHAR(50) NOT NULL,
+              Personnel_type VARCHAR(50) NOT NULL CHECK(Personnel_type IN ('Professional','Skilled','Unskilled')),
+              
              );
               """
         cursor.execute(sql3)
@@ -160,30 +160,59 @@ class Database:
 
     def create_procedures(self):
         sql0 = """
-               CREATE PROCEDURE GetAllEquipment AS BEGIN SELECT * FROM dbo.Equipment; END;
-
-               CREATE PROCEDURE GetAllMaterials AS BEGIN SELECT * FROM dbo.Materials; END;
-
-               CREATE PROCEDURE GetAllSuppliers AS BEGIN SELECT * FROM dbo.Suppliers; END;
                
-               CREATE PROCEDURE GetAllClients AS BEGIN SELECT * FROM dbo.Client; END;
-
-               CREATE PROCEDURE GetAllProjects AS BEGIN SELECT * FROM dbo.Projects; END;
-
-               CREATE PROCEDURE GetAllFinancials AS BEGIN SELECT * FROM dbo.Financials; END;
-
-               CREATE PROCEDURE GetAllPersonnel AS BEGIN SELECT * FROM dbo.Personnel; END;
-
-               CREATE PROCEDURE GetAllCerifications AS BEGIN SELECT * FROM dbo.Cerification; END;
+               CREATE PROCEDURE GetAllEquipment AS BEGIN SELECT * FROM dbo.Equipment; END;
+               CREATE PROCEDURE GetAllMaterials AS BEGIN SELECT * FROM dbo.Materials; END;
+               CREATE PROCEDURE GetAllSuppliers AS BEGIN SELECT * FROM dbo.Suppliers; END;
+               CREATE PROCEDURE CountAllSuppliers AS BEGIN SELECT COUNT(*) FROM dbo.Suppliers; END;
+               CREATE PROCEDURE CountUnpaidSuppliers AS BEGIN SELECT COUNT(*) FROM dbo.Suppliers WHERE Supplier_status = 'Unpaid'; END;
+               CREATE PROCEDURE GetUnpaidAmountTotal AS BEGIN SELECT SUM(Remaining_amount) AS total FROM dbo.Suppliers WHERE Supplier_status = 'Unpaid'; END;
 
                GRANT EXECUTE ON GetAllEquipment TO SUPPLY_MANAGER;
                GRANT EXECUTE ON GetAllMaterials TO SUPPLY_MANAGER;
                GRANT EXECUTE ON GetAllSuppliers TO SUPPLY_MANAGER;
-               GRANT EXECUTE ON GetAllClients TO PROJECTS_MANAGER;
+               GRANT EXECUTE ON CountAllSuppliers TO SUPPLY_MANAGER;
+               GRANT EXECUTE ON CountUnpaidSuppliers TO SUPPLY_MANAGER;
+               GRANT EXECUTE ON GetUnpaidAmountTotal TO SUPPLY_MANAGER;
+
+
+               CREATE PROCEDURE GetAllProjects AS BEGIN SELECT * FROM dbo.Projects; END;
+               CREATE PROCEDURE GetTotalProjects AS BEGIN SELECT COUNT(*) FROM dbo.Projects; END;
+               CREATE PROCEDURE GetPostCovidProjects AS BEGIN SELECT * FROM dbo.Projects WHERE Project_start_date > '1/1/2021'; END;
+               CREATE PROCEDURE GetUnfinishedProjectsCount AS BEGIN SELECT COUNT(*) FROM dbo.Projects WHERE Project_status = 'In progress'; END;
+
                GRANT EXECUTE ON GetAllProjects TO PROJECTS_MANAGER;
+               GRANT EXECUTE ON GetTotalProjects TO PROJECTS_MANAGER;
+               GRANT EXECUTE ON GetPostCovidProjects TO PROJECTS_MANAGER;
+               GRANT EXECUTE ON GetUnfinishedProjectsCount TO PROJECTS_MANAGER;
+               
+
+               CREATE PROCEDURE GetAllClients AS BEGIN SELECT * FROM dbo.Client; END;
+               CREATE PROCEDURE GetTotalClients AS BEGIN SELECT COUNT(*) FROM dbo.Client; END;
+               
+               GRANT EXECUTE ON GetAllClients TO PROJECTS_MANAGER;
+               GRANT EXECUTE ON GetTotalClients TO PROJECTS_MANAGER;
+               
+
+               CREATE PROCEDURE GetAllFinancials AS BEGIN SELECT * FROM dbo.Financials; END;
+               CREATE PROCEDURE GetTotalFinancials AS BEGIN SELECT COUNT(*) FROM dbo.Financials; END;
+               CREATE PROCEDURE GetAllFinancials AS BEGIN SELECT * FROM dbo.Financials; END;
+
+
                GRANT EXECUTE ON GetAllFinancials TO FINANCE_MANAGER;
+
+
+               CREATE PROCEDURE GetAllPersonnel AS BEGIN SELECT * FROM dbo.Personnel; END;
+               CREATE PROCEDURE GetAllCerifications AS BEGIN SELECT * FROM dbo.Cerification; END;
+
+               
                GRANT EXECUTE ON GetAllPersonnel TO HUMAN_RESOURCE_MANAGER;
                GRANT EXECUTE ON GetAllCertifications TO HUMAN_RESOURCE_MANAGER;
+
+               
+              
+               
+
 
                """
         

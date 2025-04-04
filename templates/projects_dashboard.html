@@ -342,7 +342,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save Equipment</button>
+                      <button type="button" class="btn btn-primary">Save Project</button>
                     </div>
                   </div>
                 </div>
@@ -362,11 +362,13 @@
                     <table class="table align-items-center mb-0">
                       <thead class="thead-light">
                         <tr>
-                          <th scope="col">Projects ID</th>
-                          <th scope="col">Supplier ID</th>
-                          <th scope="col">Projects Name</th>
-                          <th scope="col">ProjectsStart</th>
-                          <th scope="col">Purchase Date</th>
+                          <th scope="col">Project ID</th>
+                          <th scope="col">Project Name</th>
+                          <th scope="col">Project Start</th>
+                          <th scope="col">Project End</th>
+                          <th scope="col">Project Budget</th>
+                          <th scope="col">Client ID</th>
+
                           <th scope="col" class="text-end">Projects Status</th>
                           <th scope="col" class="text-center">Actions</th>
                         </tr>
@@ -375,22 +377,21 @@
                         {% for Project in Projects %}
                         <tr>
                      
-                          <th scope="row">{{ Projects.id }}</th>
-                          <td>{{ Projects.supplier_id }}</td>
-                          <td>{{ Projects.name }}</td>
-                          <td>{{ Projects.start_date }}</td>
-                          <td>{{ Projects.end_date }}</td>
-                          <td>{{ Projects.budget }}</td>
+                          <th scope="row">{{ Project.id }}</th>
+                          <td>{{ Project.name }}</td>
+                          <td>{{ Project.start_date }}</td>
+                          <td>{{ Project.end_date }}</td>
+                          <td>{{ Project.budget }}</td>
 
                           <td>{{ Projects.client_id }}</td>
 
-                          <td class="text-end"><span class="badge badge-{% if Projects.status == 'Completed' %}success{% elif Projects.status == 'Ongoing' %}danger{% else %}warning{% endif %}">{{ Projects.status }}</span></td>
+                          <td class="text-end"><span class="badge badge-{% if Project.status == 'Completed' %}success{% elif Project.status == 'Ongoing' %}danger{% else %}warning{% endif %}">{{ Projects.status }}</span></td>
                           <td class="text-center">
                             <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" 
-                              onclick="populateEditForm('{{ Projects.id }}', '{{ Projects.supplier_id }}', '{{ Projects.name }}', '{{ Projects.start_date }}', '{{ Projects.end_date }}', '{{ Projects.budget }}', '{{Projects.client_id}}', '{{ Projects.status }}')">
+                              onclick="populateEditForm('{{ Project.id }}', '{{ Project.name }}', '{{ Project.start_date }}', '{{ Project.end_date }}', '{{ Project.budget }}', '{{Project.client_id}}', '{{ Project.status }}')">
                               <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ Projects.id }}')">
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ Project.id }}')">
                               <i class="fa fa-trash"></i>
                             </button>
                           </td>
@@ -408,7 +409,7 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Equipment</h5>
+                    <h5 class="modal-title" id="editModalLabel">Edit Project</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
@@ -458,7 +459,7 @@
             <script>
                      
               function populateEditForm(id, name, start_date, end_date, budget, client_id, status) {
-                document.getElementById("ProjecstID").value = id;
+                document.getElementById("ProjectsID").value = id;
 
                 document.getElementById("ProjectsName").value = name;
                 document.getElementById("ProjectsStart").value = start_date;

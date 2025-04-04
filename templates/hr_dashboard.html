@@ -87,8 +87,11 @@
                 <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="/finance/dashboard">
-                        <span class="sub-item">Finance Manager Dashboard</span>
+                      <a href="/hr/dashboard">
+                        <span class="sub-item">HR Manager Dashboard</span>
+                      </a>
+                      <a href="/cert/dashboard">
+                        <span class="sub-item">Manage Certifications Dashboard</span>
                       </a>
                     </li>
                   </ul>
@@ -218,7 +221,7 @@
               class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
             >
               <div>
-                <h2 class="fw-bold mb-3">SLS Finance Manager Dashboard</h2>
+                <h2 class="fw-bold mb-3">SLS HR Manager Dashboard</h2>
 
               </div>
 
@@ -237,7 +240,7 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category text-muted">Transactions</p>
+                          <p class="card-category text-muted">Skilled Labour</p>
                           <h4 class="card-title">1,294</h4>
                         </div>
                       </div>
@@ -258,7 +261,7 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category text-muted">Amount Paid</p>
+                          <p class="card-category text-muted">Unskilled Labour</p>
                           <h4 class="card-title">1303</h4>
                         </div>
                       </div>
@@ -266,12 +269,32 @@
                   </div>
                 </div>
               </div>
-             
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round" style="background-color: #FAFAFA;">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-danger bubble-shadow-small"
+                        >
+                          <i class="fas fa-money-bill"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category text-muted">Total Wages</p>
+                          <h4 class="card-title">$ 1,345</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="col-sm-6 col-md-3 mb-4">
                 <div class="card card-stats card-round" style="background-color: #FAFAFA; height: 90%; display: flex; align-items: center; justify-content: center;">
                   <div class="card-body text-center icon-big ">
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal" style="font-size: medium;">
-                      <i class="fas fa-plus"></i> Add Transaction
+                      <i class="fas fa-plus"></i> Add Personnel
                     </button>
                   </div>
                 </div>
@@ -282,50 +305,40 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="addSupplierModalLabel">Add New Transaction</h5>
+                      <h5 class="modal-title" id="addSupplierModalLabel">Add New Personnel</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                       <form>
                         <div class="mb-3">
-                          <label for="TransactionType" class="form-label">Transaction Type</label>
-                          <select class="form-control" id="TransactionType">
-                            <option>Personnel Wages</option>
-                            <option>Supplier Payments</option>
-                            <option>Client Payments</option>
-                          </select>
+                          <label for="PersonnelName" class="form-label">Personnel Name</label>
+                          <input type="text" class="form-control" id="PersonnelName">
                         </div>
                         <div class="mb-3">
-                          <label for="TransactionAmount" class="form-label">Transaction Amount</label>
-                          <input type="text" class="form-control" id="TransactionAmount">
-                        </div>
-                        <div class="mb-3">
-                            <label for="TransactionDate" class="form-label">Transaction Date</label>
-                            <input type="date" class="form-control" id="TransactionDate">
+                            <label for="PersonnelCode" class="form-label">Personnel Code</label>
+                            <input type="text" class="form-control" id="PersonnelCode">
                           </div>
                         <div class="mb-3">
-                            <label for="PersonnelID" class="form-label">Personnel ID</label>
-                            <input type="text" class="form-control" id="PersonnelID">
+                            <label for="PersonnelWages" class="form-label">Personnel Wages</label>
+                            <input type="text" class="form-control" id="PersonnelWages">
                         </div>
                         <div class="mb-3">
-                            <label for="ProjectID" class="form-label">Project ID</label>
-                            <input type="text" class="form-control" id="ProjectID">
-                        </div>
-                        <div class="mb-3">
-                          <label for="ClientID" class="form-label">Client ID</label>
-                          <input type="text" class="form-control" id="ClientID">
-                        </div>
-                        <div class="mb-3">
-                          <label for="SupplyID" class="form-label">Supply ID</label>
-                          <input type="text" class="form-control" id="SupplyID">
+                            <label for="PersonnelRole" class="form-label">Personnel Role</label>
+                            <input type="text" class="form-control" id="PersonnelRole">
                         </div>
                          
-                        
+                        <div class="mb-3">
+                          <label for="PersonnelType" class="form-label">Personnel Type</label>
+                          <select class="form-control" id="PersonnelType">
+                            <option>Skilled</option>
+                            <option>Unskilled</option>
+                          </select>
+                        </div>
                       </form>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save Transaction</button>
+                      <button type="button" class="btn btn-primary">Save Personnel</button>
                     </div>
                   </div>
                 </div>
@@ -337,7 +350,7 @@
               <div class="card card-round">
                 <div class="card-header">
                   <div class="card-head-row card-tools-still-right">
-                    <div class="card-title">Transaction Payments</div>
+                    <div class="card-title">Personnel Payments</div>
                   </div>
                 </div>
                 <div class="card-body p-0">
@@ -345,39 +358,33 @@
                     <table class="table align-items-center mb-0">
                       <thead class="thead-light">
                         <tr>
-                          <th scope="col">Transaction ID</th>
-                          <th scope="col">Transaction Type</th>
-                          <th scope="col">Transaction Amount</th>
-                          <th scope="col">Transaction Date</th>
                           <th scope="col">Personnel ID</th>
-                          <th scope="col">Project ID</th>
-                          <th scope="col">Client ID</th>
-                          <th scope="col" class="text-center">Supplier ID</th>
+                          <th scope="col">Personnel Name</th>
+                          <th scope="col">Personnel Code</th>
+                          <th scope="col">Personnel Wages</th>
+                          <th scope="col">Personnel Role</th>
 
+                          <th scope="col" class="text-end">Personnel Type</th>
                           <th scope="col" class="text-center">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {% for Transaction in Transactions %}
+                        {% for Personnel in Personnels %}
                         <tr>
                      
-                          <th scope="row">{{ Transaction.id }}</th>
-                          <td class=""><span class="badge badge-{% if Transaction.type == 'Personnel Wages' %}success{% elif Transaction.type == 'Supplier Payments' %}info{% elif Transaction.type == 'Client Payments'%}danger{% else %}warning{% endif %}">{{ Transactions.status }}</span></td>
+                          <th scope="row">{{ Personnel.id }}</th>
+                          <td>{{ Personnel.name }}</td>
+                          <td>{{ Personnel.code }}</td>
+                          <td>{{ Personnel.wages }}</td>
+                          <td>{{ Personnel.role }}</td>
 
-                          <td>{{ Transaction.amount }}</td>
-                          
-                          <td>{{ Transaction.date }}</td>
-                          <td>{{ Transaction.personnel_id }}</td>
-                          <td>{{ Transaction.project_id }}</td>
-                          <td>{{ Transaction.client_id }}</td>
-                          <td class="text-center">{{ Transaction.supplier_id }}</td>
-
+                          <td class="text-end"><span class="badge badge-{% if Personnel.type == 'Skilled' %}success{% elif Personnel.type == 'Unskilled' %}info{% else %}warning{% endif %}">{{ Personnels.status }}</span></td>
                           <td class="text-center">
                             <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" 
-                              onclick="populateEditForm('{{ Transaction.id }}', '{{ Transaction.type }}', '{{ Transaction.amount }}', '{{ Transaction.date }}', '{{ Transaction.personnel_id }}', '{{ Transaction.project_id }}', '{{ Transaction.client_id }}', '{{ Transaction.supplier_id }}')">
+                              onclick="populateEditForm('{{ Personnel.id }}', '{{ Personnel.name }}', '{{ Personnel.code }}', '{{ Personnel.wages }}', '{{ Personnel.role }}', '{{ Personnel.type }}')">
                               <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ Transaction.id }}')">
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ Personnel.id }}')">
                               <i class="fa fa-trash"></i>
                             </button>
                           </td>
@@ -395,50 +402,40 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Transaction</h5>
+                    <h5 class="modal-title" id="editModalLabel">Edit Personnel</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
                     <form>
-                      <div class="mb-3">
-                        <label for="TransactionID" class="form-label">Transaction ID</label>
-                        <input type="text" class="form-control" id="TransactionID" readonly>
-                      </div>
-                      <div class="mb-3">
-                        <label for="TransactionType" class="form-label">Transaction Type</label>
-                        <select class="form-control" id="TransactionType">
-                          <option>Personnel Wages</option>
-                          <option>Supplier Payments</option>
-                          <option>Client Payments</option>
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="TransactionAmount" class="form-label">Transaction Amount</label>
-                        <input type="text" class="form-control" id="TransactionAmount">
-                      </div>
-                      <div class="mb-3">
-                          <label for="TransactionDate" class="form-label">Transaction Date</label>
-                          <input type="date" class="form-control" id="TransactionDate">
+                        <div class="mb-3">
+                            <label for="PersonnelID" class="form-label">Personnel ID</label>
+                            <input type="text" class="form-control" id="PersonnelID" readonly>
                         </div>
-                      <div class="mb-3">
-                          <label for="PersonnelID" class="form-label">Personnel ID</label>
-                          <input type="text" class="form-control" id="PersonnelID">
-                      </div>
-                      <div class="mb-3">
-                          <label for="ProjectID" class="form-label">Project ID</label>
-                          <input type="text" class="form-control" id="ProjectID">
-                      </div>
-                      <div class="mb-3">
-                        <label for="ClientID" class="form-label">Client ID</label>
-                        <input type="text" class="form-control" id="ClientID">
-                      </div>
-                      <div class="mb-3">
-                        <label for="SupplyID" class="form-label">Supply ID</label>
-                        <input type="text" class="form-control" id="SupplyID">
-                      </div>
-                       
-                      
-                    </form>
+                        <div class="mb-3">
+                          <label for="PersonnelName" class="form-label">Personnel Name</label>
+                          <input type="text" class="form-control" id="PersonnelName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="PersonnelCode" class="form-label">Personnel Code</label>
+                            <input type="text" class="form-control" id="PersonnelCode">
+                          </div>
+                        <div class="mb-3">
+                            <label for="PersonnelWages" class="form-label">Personnel Wages</label>
+                            <input type="text" class="form-control" id="PersonnelWages">
+                        </div>
+                        <div class="mb-3">
+                            <label for="PersonnelRole" class="form-label">Personnel Role</label>
+                            <input type="text" class="form-control" id="PersonnelRole">
+                        </div>
+                         
+                        <div class="mb-3">
+                          <label for="PersonnelType" class="form-label">Personnel Type</label>
+                          <select class="form-control" id="PersonnelType">
+                            <option>Skilled</option>
+                            <option>Unskilled</option>
+                          </select>
+                        </div>
+                      </form>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -450,18 +447,15 @@
             
             <script>
                      
-              function populateEditForm(id, type, amount, date, personnel_id, project_id, client_id, supply_id) {
-                document.getElementById("TransactionID").value = id;
+              function populateEditForm(id, name, code, wages, role, type) {
+                document.getElementById("PersonnelID").value = id;
 
-                document.getElementById("TransactionType").value = type;
-                document.getElementById("TransactionAmount").value = amount;
-                document.getElementById("TransactionDate").value = date;
+                document.getElementById("PersonnelName").value = name;
+                document.getElementById("PersonnelCode").value = code;
+                document.getElementById("PersonnelWages").value = wages;
 
-                document.getElementById("PersonnelID").value = personnel_id;
-                document.getElementById("ProjectID").value = project_id;
-                document.getElementById("ClientID").value = client_id;
-                document.getElementById("SupplierID").value = supply_id;
-
+                document.getElementById("PersonnelRole").value = role;
+                document.getElementById("PersonnelType").value = type;
 
               }
             
