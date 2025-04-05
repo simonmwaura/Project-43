@@ -89,27 +89,68 @@ def set_cookies(username, role, passw_):
     
 
 def fetch_admin_data():
-    # execute a procedure that returns all the data
-    sql_q = """
-            SELECT * FROM dbo.Client;
-            SELECT COUNT(*) FROM dbo.Client;
-            """
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    s = cursor.execute(sql_q).fetchall()
-    print(s)
+    header_data = []
+    # execute a procedure that returns all the data
+    sql_q = """
+            EXEC GetTotalProjects;
+            """
+    header_data.append(cursor.execute(sql_q).fetchone()[0])
+    sql_q = """
+            EXEC GetProjectBudgetTotals;
+            """
+    header_data.append(cursor.execute(sql_q).fetchone()[0])
+    sql_q = """
+            EXEC GetUnpaidAmountTotal;
+            """
+    header_data.append(cursor.execute(sql_q).fetchone()[0])
+    sql_q = """
+            EXEC CountUnpaidSuppliers;
+            """
+    header_data.append(cursor.execute(sql_q).fetchone()[0])
+    # handle charts
+    # handle footers
+    cursor.execute("EXEC GetAllSuppliers;")
+    rows = cursor.fetchall()
+
+    column_names = [column[0] for column in cursor.description]
+
+    # Convert to list of dicts
+    supply_data = [dict(zip(column_names, row)) for row in rows]
+
+    cursor.execute("EXEC GetAllUsersWithRoles;")
+    rows = cursor.fetchall()
+    columns = [column[0] for column in cursor.description]
+    roles_data = [dict(zip(columns, row)) for row in rows]
+
+    return header_data, supply_data, roles_data
 
 
 @app.route("/admin/dashboard")
 def admin_dashboard():
-    if(request.cookies.get("role") != "ADMIN_OVR"):
+    if(session["user_role"] != "ADMIN_OVR"):
         return redirect(url_for("welcome_login"))
     # utility function to fetch all the data
-    #print(settings.user_role)
-    fetch_admin_data()
-    return render_template("admin_dashboard.html", user=request.cookies.get("user"))
+    user_info = [session["db_creds"]["username"], "Administrator"]
 
+    header_data, supply_data, roles_data = fetch_admin_data()
+    return render_template("admin_dashboard.html", user_info=user_info, header_data=header_data, suppliers=supply_data, roles=roles_data)
+
+@app.route("/role/add")
+def add_role():
+    if(session["user_role"] != "ADMIN_OVR"):
+        return redirect(url_for("welcome_login"))
+
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(f"EXEC EditUserRole @LoginName = '{request.form["editMemberName"]}', @NewRole = '{request.form["editRoleName"]}';")
+
+    
 # Logout route
 @app.route('/logout')
 def logout():

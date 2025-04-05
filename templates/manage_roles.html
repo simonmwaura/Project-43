@@ -87,14 +87,11 @@
                 <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="/suppliers/dashboard">
-                        <span class="sub-item">Supply Manager Dashboard</span>
+                      <a href="/pm/dashboard">
+                        <span class="sub-item">HR Manager Dashboard</span>
                       </a>
-                      <a href="/materials/dashboard">
-                        <span class="sub-item">Manage Materials Dashboard</span>
-                      </a>
-                      <a href="/equipment/dashboard">
-                        <span class="sub-item">Manage Equipment Dashboard</span>
+                      <a href="/client/dashboard">
+                        <span class="sub-item">Manage Certifications Dashboard</span>
                       </a>
                     </li>
                   </ul>
@@ -224,7 +221,7 @@
               class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
             >
               <div>
-                <h2 class="fw-bold mb-3">SLS Supply Manager Dashboard</h2>
+                <h2 class="fw-bold mb-3">SLS HR Manager Dashboard</h2>
 
               </div>
 
@@ -238,66 +235,24 @@
                         <div
                           class="icon-big text-center icon-primary bubble-shadow-small"
                         >
-                          <i class="fas fa-dolly"></i>
+                          <i class="fas fa-archive"></i>
                         </div>
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category text-muted">Suppliers</p>
+                          <p class="card-category text-muted">Certifications</p>
                           <h4 class="card-title">1,294</h4>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round" style="background-color: #FAFAFA;">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-info bubble-shadow-small"
-                        >
-                          <i class="fas fa-dollar-sign"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category text-muted">Unpaid Suppliers</p>
-                          <h4 class="card-title">1303</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round" style="background-color: #FAFAFA;">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-danger bubble-shadow-small"
-                        >
-                          <i class="fas fa-money-bill"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category text-muted">Amount Owed</p>
-                          <h4 class="card-title">$ 1,345</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            </div>
               <div class="col-sm-6 col-md-3 mb-4">
                 <div class="card card-stats card-round" style="background-color: #FAFAFA; height: 90%; display: flex; align-items: center; justify-content: center;">
                   <div class="card-body text-center icon-big ">
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal" style="font-size: medium;">
-                      <i class="fas fa-plus"></i> Add Supplier
+                      <i class="fas fa-plus"></i> Add Certification
                     </button>
                   </div>
                 </div>
@@ -308,36 +263,32 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="addSupplierModalLabel">Add New Supplier</h5>
+                      <h5 class="modal-title" id="addSupplierModalLabel">Add New Certification</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                       <form>
                         <div class="mb-3">
-                          <label for="supplierName" class="form-label">Supplier Name</label>
-                          <input type="text" class="form-control" id="supplierName">
+                            <label for="PersonnelID" class="form-label">Personnel ID</label>
+                            <input type="text" class="form-control" id="PersonnelID">
                         </div>
                         <div class="mb-3">
-                          <label for="supplierEmail" class="form-label">Supplier Email</label>
-                          <input type="email" class="form-control" id="supplierEmail">
+                            <label for="CertificationNumber" class="form-label">Certification Number</label>
+                            <input type="text" class="form-control" id="CertificationNumber">
+                          </div>
+                        <div class="mb-3">
+                          <label for="CertificationName" class="form-label">Certification Name</label>
+                          <input type="text" class="form-control" id="CertificationName">
                         </div>
                         <div class="mb-3">
-                          <label for="supplierStatus" class="form-label">Supplier Status</label>
-                          <select class="form-control" id="supplierStatus">
-                            <option>Active</option>
-                            <option>Inactive</option>
-                            <option>Pending</option>
-                          </select>
-                        </div>
-                        <div class="mb-3">
-                          <label for="remainingAmount" class="form-label">Remaining Amount</label>
-                          <input type="number" class="form-control" id="remainingAmount">
-                        </div>
+                            <label for="CertificationExpiry" class="form-label">Certification Expiry</label>
+                            <input type="date" class="form-control" id="CertificationExpiry">
+                          </div>
                       </form>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save Supplier</button>
+                      <button type="button" class="btn btn-primary">Save Certification</button>
                     </div>
                   </div>
                 </div>
@@ -345,87 +296,84 @@
               
             </div>
 
-            <div class="col-md-12">
-              <div class="card card-round">
-                <div class="card-header">
-                  <div class="card-head-row card-tools-still-right">
-                    <div class="card-title">Supplier Payments</div>
+            <div style="width: 75%; margin: 0 auto;">
+                <div class="card card-round">
+                  <div class="card-header">
+                    <div class="card-head-row card-tools-still-right">
+                      <div class="card-title">Certification Payments</div>
+                    </div>
                   </div>
-                </div>
-                <div class="card-body p-0">
-                  <div class="table-responsive">
-                    <table class="table align-items-center mb-0">
-                      <thead class="thead-light">
-                        <tr>
-                          <th scope="col">Supplier ID</th>
-                          <th scope="col">Supplier Name</th>
-                          <th scope="col">Supplier Email</th>
-                          <th scope="col" class="text-end">Supplier Status</th>
-                          <th scope="col" class="text-end">Remaining Amount</th>
-                          <th scope="col" class="text-center">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for supplier in suppliers %}
-                        <tr>
-                          <th scope="row">{{ supplier.id }}</th>
-                          <td>{{ supplier.name }}</td>
-                          <td>{{ supplier.email }}</td>
-                          <td class="text-end"><span class="badge badge-{% if supplier.status == 'Paid' %}success{% elif supplier.status == 'Unpaid' %}danger{% else %}warning{% endif %}">{{ supplier.status }}</span></td>
-                          <td class="text-end">${{ supplier.remaining_amount }}</td>
-                          <td class="text-center">
-                            <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" 
-                              onclick="populateEditForm('{{ supplier.id }}', '{{ supplier.name }}', '{{ supplier.email }}', '{{ supplier.status }}', '{{ supplier.remaining_amount }}')">
-                              <i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ supplier.id }}')">
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table align-items-center mb-0">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Certification ID</th>
+                            <th scope="col">Personnel ID</th>
+                            <th scope="col">Certification Number</th>
+                            <th scope="col">Certification Name</th>
+                            <th scope="col">Certification Expiry</th>
+                            <th scope="col" class="text-center">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for Certification in Certifications %}
+                          <tr>
+                            <td>{{ Certification.id }}</td>
+                            <td>{{ Certification.personnel_ID }}</td>
+                            <td>{{ Certification.number }}</td>
+                            <td>{{ Certification.name }}</td>
+                            <td>{{ Certification.expiry }}</td>
+                            <td class="text-center">
+                              <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" 
+                                onclick="populateEditForm('{{ Certification.id }}', '{{ Certification.personnel_ID }}', '{{ Certification.number }}', '{{ Certification.name }}', '{{ Certification.expiry }}')">
+                                <i class="fa fa-edit"></i>
+                              </button>
+                              <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ Certification.id }}')">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+              
             
             <!-- Edit Modal -->
             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Supplier</h5>
+                    <h5 class="modal-title" id="editModalLabel">Edit Certification</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
                     <form>
-                      <div class="mb-3">
-                        <label for="supplierID" class="form-label">Supplier ID</label>
-                        <input type="text" class="form-control" id="supplierID" readonly>
-                      </div>
-                      <div class="mb-3">
-                        <label for="supplierName" class="form-label">Supplier Name</label>
-                        <input type="text" class="form-control" id="supplierName">
-                      </div>
-                      <div class="mb-3">
-                        <label for="supplierEmail" class="form-label">Supplier Email</label>
-                        <input type="email" class="form-control" id="supplierEmail">
-                      </div>
-                      <div class="mb-3">
-                        <label for="supplierStatus" class="form-label">Supplier Status</label>
-                        <select class="form-control" id="supplierStatus">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                          <option>Pending</option>
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="remainingAmount" class="form-label">Remaining Amount</label>
-                        <input type="number" class="form-control" id="remainingAmount">
-                      </div>
-                    </form>
+                        <div class="mb-3">
+                            <label for="CertificationID" class="form-label">Certification ID</label>
+                            <input type="text" class="form-control" id="CertificationID">
+                        </div>
+                        <div class="mb-3">
+                            <label for="PersonnelID" class="form-label">Personnel ID</label>
+                            <input type="text" class="form-control" id="PersonnelID">
+                        </div>
+                        <div class="mb-3">
+                            <label for="CertificationNumber" class="form-label">Certification Number</label>
+                            <input type="text" class="form-control" id="CertificationNumber">
+                          </div>
+                        <div class="mb-3">
+                          <label for="CertificationName" class="form-label">Certification Name</label>
+                          <input type="text" class="form-control" id="CertificationName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="CertificationExpiry" class="form-label">Certification Expiry</label>
+                            <input type="date" class="form-control" id="CertificationExpiry">
+                          </div>
+                      </form>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -436,12 +384,17 @@
             </div>
             
             <script>
-              function populateEditForm(id, name, email, status, amount) {
-                document.getElementById("supplierID").value = id;
-                document.getElementById("supplierName").value = name;
-                document.getElementById("supplierEmail").value = email;
-                document.getElementById("supplierStatus").value = status;
-                document.getElementById("remainingAmount").value = amount;
+                     
+              function populateEditForm(id, name, code, wages, role, type) {
+                document.getElementById("PersonnelID").value = id;
+
+                document.getElementById("PersonnelName").value = name;
+                document.getElementById("PersonnelCode").value = code;
+                document.getElementById("PersonnelWages").value = wages;
+
+                document.getElementById("PersonnelRole").value = role;
+                document.getElementById("PersonnelType").value = type;
+
               }
             
               function confirmDelete(id) {

@@ -44,7 +44,7 @@ class Database:
               Personnel_code VARCHAR(50) NOT NULL UNIQUE,
               Personnel_wages DECIMAL(15,2) NOT NULL,
               Personnel_role VARCHAR(50) NOT NULL,
-              Personnel_type VARCHAR(50) NOT NULL CHECK(Personnel_type IN ('Professional','Skilled','Unskilled')),
+              Personnel_type VARCHAR(50) NOT NULL CHECK(Personnel_type IN ('Skilled','Unskilled')),
               
              );
               """
@@ -178,12 +178,15 @@ class Database:
 
                CREATE PROCEDURE GetAllProjects AS BEGIN SELECT * FROM dbo.Projects; END;
                CREATE PROCEDURE GetTotalProjects AS BEGIN SELECT COUNT(*) FROM dbo.Projects; END;
-               CREATE PROCEDURE GetPostCovidProjects AS BEGIN SELECT * FROM dbo.Projects WHERE Project_start_date > '1/1/2021'; END;
+               CREATE PROCEDURE GetPostCovidProjects AS BEGIN SELECT COUNT(*) FROM dbo.Projects WHERE Project_start_date > '1/1/2021'; END;
+               CREATE PROCEDURE GetProjectBudgetTotals AS BEGIN SELECT SUM(Project_budget) AS total FROM dbo.Projects; END;
+
                CREATE PROCEDURE GetUnfinishedProjectsCount AS BEGIN SELECT COUNT(*) FROM dbo.Projects WHERE Project_status = 'In progress'; END;
 
                GRANT EXECUTE ON GetAllProjects TO PROJECTS_MANAGER;
                GRANT EXECUTE ON GetTotalProjects TO PROJECTS_MANAGER;
                GRANT EXECUTE ON GetPostCovidProjects TO PROJECTS_MANAGER;
+               GRANT EXECUTE ON GetProjectBudgetTotals TO PROJECTS_MANAGER;
                GRANT EXECUTE ON GetUnfinishedProjectsCount TO PROJECTS_MANAGER;
                
 
@@ -196,22 +199,155 @@ class Database:
 
                CREATE PROCEDURE GetAllFinancials AS BEGIN SELECT * FROM dbo.Financials; END;
                CREATE PROCEDURE GetTotalFinancials AS BEGIN SELECT COUNT(*) FROM dbo.Financials; END;
-               CREATE PROCEDURE GetAllFinancials AS BEGIN SELECT * FROM dbo.Financials; END;
-
+               CREATE PROCEDURE GetSumTotalFinancials AS BEGIN SELECT SUM(Transaction_amount) AS total FROM dbo.Financials; END;
 
                GRANT EXECUTE ON GetAllFinancials TO FINANCE_MANAGER;
+               GRANT EXECUTE ON GetTotalFinancials TO FINANCE_MANAGER;
+               GRANT EXECUTE ON GetSumTotalFinancials TO FINANCE_MANAGER;
 
 
                CREATE PROCEDURE GetAllPersonnel AS BEGIN SELECT * FROM dbo.Personnel; END;
-               CREATE PROCEDURE GetAllCerifications AS BEGIN SELECT * FROM dbo.Cerification; END;
-
-               
+               CREATE PROCEDURE GetSkilledPersonnelCount AS BEGIN SELECT COUNT(*) FROM dbo.Personnel WHERE Personnel_type = 'Skilled'; END;
+               CREATE PROCEDURE GetUnskilledPersonnelCount AS BEGIN SELECT COUNT(*) FROM dbo.Personnel WHERE Personnel_type = 'Unskilled'; END;
+               CREATE PROCEDURE GetAllPersonnelWages AS BEGIN SELECT SUM(Personnel_wages) AS total FROM dbo.Personnel; END;
+          
                GRANT EXECUTE ON GetAllPersonnel TO HUMAN_RESOURCE_MANAGER;
-               GRANT EXECUTE ON GetAllCertifications TO HUMAN_RESOURCE_MANAGER;
+               GRANT EXECUTE ON GetSkilledPersonnelCount TO HUMAN_RESOURCE_MANAGER;
+               GRANT EXECUTE ON GetUnskilledPersonnelCount TO HUMAN_RESOURCE_MANAGER;
+               GRANT EXECUTE ON GetAllPersonnelWages TO HUMAN_RESOURCE_MANAGER;
+               
 
-               
-              
-               
+               CREATE PROCEDURE GetAllCerifications AS BEGIN SELECT * FROM dbo.Cerification; END;
+               CREATE PROCEDURE GetTotalCerifications AS BEGIN SELECT COUNT(*) FROM dbo.Cerification; END;
+
+               GRANT EXECUTE ON GetAllCertifications TO HUMAN_RESOURCE_MANAGER;
+               GRANT EXECUTE ON GetTotalCertifications TO HUMAN_RESOURCE_MANAGER;
+
+               CREATE PROCEDURE GetUsersWithSpecificRoles
+               AS
+               BEGIN
+                    SELECT 
+                         dp.name AS UserName,
+                         dp.type_desc AS UserType,
+                         sp.name AS LoginName,
+                         dr.name AS RoleName
+                    FROM sys.database_principals dp
+                    LEFT JOIN sys.server_principals sp ON dp.sid = sp.sid
+                    LEFT JOIN sys.database_role_members drm ON dp.principal_id = drm.member_principal_id
+                    LEFT JOIN sys.database_principals dr ON drm.role_principal_id = dr.principal_id
+                    WHERE dp.type IN ('S', 'E', 'U') 
+                         AND dp.name NOT IN ('dbo', 'guest', 'INFORMATION_SCHEMA', 'sys')
+                         AND dr.name IN ('ADMIN_OVR', 'SUPPLY_MANAGER', 'PROJECT_MANAGER', 'HUMAN_RESOURCE_MANAGER','FINANCE_MANAGER')  
+                    ORDER BY dp.name;
+               END
+
+               CREATE PROCEDURE AddUserToRole
+                    @LoginName NVARCHAR(128),
+                    @RoleName NVARCHAR(128)
+               AS
+               BEGIN
+                    -- Create DB user if not exists
+                    IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = @LoginName)
+                    BEGIN
+                         EXEC sp_createuser @LoginName;
+                    END
+
+                    -- Add to role if not already a member
+                    IF NOT EXISTS (
+                         SELECT 1
+                         FROM sys.database_role_members rm
+                         JOIN sys.database_principals r ON r.principal_id = rm.role_principal_id
+                         JOIN sys.database_principals u ON u.principal_id = rm.member_principal_id
+                         WHERE r.name = @RoleName AND u.name = @LoginName
+                    )
+                    BEGIN
+                         EXEC sp_addrolemember @RoleName, @LoginName;
+                    END
+               END;
+
+               CREATE PROCEDURE EditUserRole
+                    @LoginName NVARCHAR(128),
+                    @NewRole NVARCHAR(128)
+               AS
+               BEGIN
+               -- Create DB user if not exists
+               IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = @LoginName)
+               BEGIN
+                    EXEC sp_createuser @LoginName;
+               END
+
+               -- Remove user from all current roles
+               DECLARE @RoleName NVARCHAR(128);
+
+               DECLARE role_cursor CURSOR FOR
+               SELECT dp2.name
+               FROM sys.database_role_members drm
+               JOIN sys.database_principals dp1 ON drm.member_principal_id = dp1.principal_id
+               JOIN sys.database_principals dp2 ON drm.role_principal_id = dp2.principal_id
+               WHERE dp1.name = @LoginName;
+
+               OPEN role_cursor;
+               FETCH NEXT FROM role_cursor INTO @RoleName;
+
+               WHILE @@FETCH_STATUS = 0
+               BEGIN
+                    EXEC sp_droprolemember @RoleName, @LoginName;
+                    FETCH NEXT FROM role_cursor INTO @RoleName;
+               END
+
+               CLOSE role_cursor;
+               DEALLOCATE role_cursor;
+
+               -- Add user to the new role if not already in it
+               IF NOT EXISTS (
+                    SELECT 1
+                    FROM sys.database_role_members rm
+                    JOIN sys.database_principals r ON r.principal_id = rm.role_principal_id
+                    JOIN sys.database_principals u ON u.principal_id = rm.member_principal_id
+                    WHERE r.name = @NewRole AND u.name = @LoginName
+               )
+               BEGIN
+                    EXEC sp_addrolemember @NewRole, @LoginName;
+               END
+               END;
+
+
+               CREATE PROCEDURE RemoveUserFromDb
+                    @UserName NVARCHAR(128)
+               AS
+               BEGIN
+                    -- Remove user from all roles
+                    DECLARE @RoleName NVARCHAR(128);
+
+                    DECLARE role_cursor CURSOR FOR
+                    SELECT dp2.name
+                    FROM sys.database_role_members drm
+                    JOIN sys.database_principals dp1 ON drm.member_principal_id = dp1.principal_id
+                    JOIN sys.database_principals dp2 ON drm.role_principal_id = dp2.principal_id
+                    WHERE dp1.name = @UserName;
+
+                    OPEN role_cursor;
+                    FETCH NEXT FROM role_cursor INTO @RoleName;
+
+                    WHILE @@FETCH_STATUS = 0
+                    BEGIN
+                         EXEC sp_droprolemember @RoleName, @UserName;
+                         FETCH NEXT FROM role_cursor INTO @RoleName;
+                    END
+
+                    CLOSE role_cursor;
+                    DEALLOCATE role_cursor;
+
+                    -- Drop user from DB
+                    IF EXISTS (SELECT 1 FROM sys.database_principals WHERE name = @UserName)
+                    BEGIN
+                         EXEC sp_dropuser @UserName;
+                    END
+               END;
+
+
+
+
 
 
                """
